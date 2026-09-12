@@ -88,28 +88,184 @@ El administrador será la pieza central del sistema y tendrá acceso a:
 5. El sistema registra el reporte y lo envía al administrador o al operador correspondiente.
 6. El ciudadano puede ver la actualización del estado del caso si se atiende el problema.
 
-## 7. Historias de usuario por rol
+## 7. Historias de usuario detalladas
 
-### Ciudadano
-- Como ciudadano, quiero ver la ubicación del camión y el tiempo estimado de llegada, para saber cuándo pasa por mi zona.
-- Como ciudadano, quiero recibir notificaciones push sobre retrasos, cancelaciones o proximidad del camión, para estar informado.
-- Como ciudadano, quiero reportar problemas de servicio con foto y detalle, para alertar a la administración.
-- Como ciudadano, quiero consultar si el camión ya pasó o si se presenta un retraso, para saber si debo esperar o tomar otra acción.
+### 7.1 Historias del ciudadano
 
-### Operador
-- Como operador, quiero ver la ruta asignada y la ubicación del camión en tiempo real, para cumplir el recorrido correctamente.
-- Como operador, quiero iniciar y finalizar la ruta, para registrar el servicio realizado.
-- Como operador, quiero recibir alertas por desviación, retraso o paro del camión, para responder rápidamente.
-- Como operador, quiero reportar problemas del camión o de la ruta, para informar al administrador.
-- Como operador, quiero seguir la ruta definida por la administración y solo cambiarla si hay un problema real, para mantener control operativo.
+#### HU-01: Ver ubicación del camión en tiempo real
+- Como ciudadano, quiero ver la ubicación del camión de basura en tiempo real, para saber si ya va en camino o si se está acercando a mi zona.
+- Criterios de aceptación:
+  - La app muestra un mapa con la ubicación actual del camión.
+  - El usuario puede ver el estado del servicio: en ruta, retrasado, cancelado o finalizado.
+  - La ubicación se actualiza con el último dato recibido del GPS.
 
-### Administrador
-- Como administrador, quiero gestionar rutas, zonas, camiones y usuarios, para organizar la operación de la ciudad.
-- Como administrador, quiero supervisar en tiempo real todos los camiones y rutas, para asegurar cumplimiento.
-- Como administrador, quiero revisar reportes ciudadanos y de operador, para tomar decisiones correctivas.
-- Como administrador, quiero generar y gestionar notificaciones, para informar a la comunidad y al personal operativo.
-- Como administrador, quiero consultar historial por ruta, zona, camión y semana, para evaluar desempeño y tomar decisiones.
-- Como administrador, quiero activar alertas automáticas ante desviación, retraso o paro, para atender incidentes de forma inmediata.
+#### HU-02: Ver estimación de llegada
+- Como ciudadano, quiero ver el tiempo estimado de llegada del camión a mi zona, para planificar mi actividad.
+- Criterios de aceptación:
+  - La app calcula la ETA basada en la ubicación del camión y la ruta asignada.
+  - El tiempo estimado cambia si el camión se retrasa o se desvía.
+  - El ciudadano puede ver la ETA sin necesidad de abrir más pantallas.
+
+#### HU-03: Recibir notificaciones de proximidad
+- Como ciudadano, quiero recibir una notificación cuando el camión esté por llegar, para saber cuándo debo sacar la basura.
+- Criterios de aceptación:
+  - El sistema envía una notificación push cuando el camión entra en un radio de proximidad definido.
+  - La notificación incluye distancia o tiempo estimado restante.
+  - El ciudadano puede desactivar o activar las notificaciones desde la configuración.
+
+#### HU-04: Recibir alertas por retraso o cancelación
+- Como ciudadano, quiero recibir notificaciones por retrasos o cancelaciones, para estar informado sobre cambios en el servicio.
+- Criterios de aceptación:
+  - El sistema notifica cuando la ruta se retrasa más del tiempo estimado.
+  - Se envía aviso por cancelación de ruta o por falla operativa.
+  - El ciudadano puede ver el motivo del cambio.
+
+#### HU-05: Reportar incidencia del servicio
+- Como ciudadano, quiero reportar una incidencia como falta de servicio, retraso excesivo o basura acumulada, para alertar al sistema.
+- Criterios de aceptación:
+  - El ciudadano puede seleccionar un tipo de incidencia.
+  - Puede adjuntar una foto y una descripción.
+  - El reporte se guarda con fecha, hora, ubicación y tipo de problema.
+  - El reporte queda visible para el administrador y el operador correspondiente.
+
+#### HU-06: Consultar estados de reportes
+- Como ciudadano, quiero consultar el estado de mi reporte, para saber si ya fue revisado o atendido.
+- Criterios de aceptación:
+  - El ciudadano puede ver una lista de sus reportes.
+  - Cada reporte muestra estado: recibido, en revisión, atendido o cerrado.
+  - El usuario puede ver comentarios o actualización del administrador.
+
+### 7.2 Historias del operador
+
+#### HU-07: Iniciar sesión y ver ruta asignada
+- Como operador, quiero iniciar sesión y ver la ruta que me fue asignada, para conocer mi recorrido del día.
+- Criterios de aceptación:
+  - El operador puede autenticarse con credenciales válidas.
+  - La app muestra la ruta activa, el horario y el camión asignado.
+  - El operador puede visualizar la ruta en un mapa.
+
+#### HU-08: Iniciar recorrido
+- Como operador, quiero iniciar el recorrido desde la app, para registrar el inicio del servicio.
+- Criterios de aceptación:
+  - La app permite iniciar ruta cuando el camión está disponible.
+  - El sistema registra hora de inicio y ubicación inicial.
+  - El estado del camión cambia a “en recorrido”.
+
+#### HU-09: Ver ubicación y seguimiento en tiempo real
+- Como operador, quiero ver mi ubicación en tiempo real y la ruta asignada, para cumplir la recolección sin desviarme.
+- Criterios de aceptación:
+  - La app muestra la ubicación del camión en tiempo real.
+  - La ruta activa se dibuja sobre el mapa.
+  - El operador puede distinguir entre ruta programada y recorrido real.
+
+#### HU-10: Recibir alertas del sistema
+- Como operador, quiero recibir alertas por retraso, desviación o paro prolongado, para responder a tiempo.
+- Criterios de aceptación:
+  - La app muestra alertas cuando ocurre una condición crítica.
+  - La alerta indica la causa probable y el tiempo de activación.
+  - El operador puede aceptar o cerrar la alerta.
+
+#### HU-11: Reportar problema del camión o de la ruta
+- Como operador, quiero reportar problemas del camión o de la ruta, para informar al administrador y evitar fallas operativas.
+- Criterios de aceptación:
+  - El operador puede seleccionar el tipo de problema.
+  - Puede agregar descripción y foto si aplica.
+  - El sistema guarda el reporte con fecha, zona y camión.
+
+#### HU-12: Finalizar recorrido
+- Como operador, quiero finalizar la ruta una vez concluido el servicio, para cerrar la operación de manera correcta.
+- Criterios de aceptación:
+  - La app permite cerrar la ruta solo si el recorrido se completó o se canceló con causa.
+  - El sistema registra la hora final y el recorrido realizado.
+  - El estado cambia a “ruta finalizada”.
+
+#### HU-13: Cambiar ruta manualmente ante un problema
+- Como operador, quiero modificar la ruta asignada solo si hay un problema real, para continuar atendiendo el servicio sin perder control.
+- Criterios de aceptación:
+  - El operador puede cambiar la ruta únicamente con justificación.
+  - El administrador recibe la notificación del cambio.
+  - El sistema guarda el histórico del cambio.
+
+### 7.3 Historias del administrador
+
+#### HU-14: Gestionar ciudades y zonas
+- Como administrador, quiero crear y gestionar ciudades y zonas, para estructurar la operación por localidades.
+- Criterios de aceptación:
+  - El administrador puede añadir, editar o eliminar zonas.
+  - Cada zona se asocia a una ciudad y a rutas específicas.
+  - Se puede visualizar el mapa de cada zona.
+
+#### HU-15: Crear y mantener rutas
+- Como administrador, quiero crear rutas de recolección, para definir los recorridos por zona y horario.
+- Criterios de aceptación:
+  - El administrador puede definir nombre, zona, días de operación y horario.
+  - La ruta puede ser activa o inactiva.
+  - Se puede asignar un camión y un operador a la ruta.
+
+#### HU-16: Asignar camiones y operadores
+- Como administrador, quiero asignar camiones y operadores a cada ruta, para asegurar que la operación se ejecute correctamente.
+- Criterios de aceptación:
+  - El sistema valida que el camión esté disponible.
+  - El operador puede estar asociado a una sola ruta activa en un momento dado.
+  - La asignación queda registrada en el historial.
+
+#### HU-17: Supervisar rutas en tiempo real
+- Como administrador, quiero ver todas las rutas y camiones activos en el mapa, para monitorear la operación en tiempo real.
+- Criterios de aceptación:
+  - El panel web muestra todos los camiones activos y sus rutas.
+  - Se visualiza el estado de cada recorrido.
+  - Se diferencian rutas normales, retrasadas, desviadas o detenidas.
+
+#### HU-18: Gestionar alertas automáticas
+- Como administrador, quiero configurar alertas automáticas por desviación, retraso o paro, para reaccionar antes de que el servicio se deteriore.
+- Criterios de aceptación:
+  - El sistema puede activar una alerta ante reglas predefinidas.
+  - La alerta se muestra en el panel del administrador.
+  - El administrador puede enviar seguimiento o resolver la incidencia desde la misma vista.
+
+#### HU-19: Revisar reportes ciudadanos y operativos
+- Como administrador, quiero revisar los reportes de los ciudadanos y operadores, para responder de forma oportuna.
+- Criterios de aceptación:
+  - El administrador puede filtrar reportes por zona, tipo y fecha.
+  - Los reportes muestran descripción, foto, ubicación y estado.
+  - El administrador puede cambiar el estado y dejar observación.
+
+#### HU-20: Gestionar notificaciones push
+- Como administrador, quiero enviar notificaciones push según eventos relevantes, para informar a la comunidad o al personal operativo.
+- Criterios de aceptación:
+  - El sistema permite crear una notificación masiva o puntual.
+  - Se puede definir zona, tipo de usuario y prioridad.
+  - La notificación incluye título, descripción y fecha de envío.
+
+#### HU-21: Consultar historial de recorrido
+- Como administrador, quiero revisar el historial por semana, ruta, zona o camión, para evaluar el desempeño del servicio.
+- Criterios de aceptación:
+  - El administrador puede consultar registros por fecha, zona, una ruta específica o un camión.
+  - El sistema muestra tiempos de recorrido, incidencias y alertas.
+  - El historial es exportable o consultable desde reportes.
+
+#### HU-22: Escalar a nuevas ciudades
+- Como administrador, quiero replicar el sistema para más ciudades, para expandir el servicio sin reestructurar completamente la plataforma.
+- Criterios de aceptación:
+  - El sistema soporta múltiples ciudades con configuración independiente.
+  - Cada ciudad tiene zonas, rutas, camiones y usuarios separados.
+  - El administrador puede cambiar el contexto de operación por ciudad.
+
+### 7.4 Historias transversales del sistema
+
+#### HU-23: Detección automática de retrasos y desviaciones
+- Como sistema, quiero detectar automáticamente desviaciones, retrasos o paradas prolongadas, para alertar al operador y al administrador.
+- Criterios de aceptación:
+  - El sistema compara la ubicación del camión con la ruta esperada.
+  - Se activa una alerta si el vehículo se sale de la ruta o supera el tiempo permitido.
+  - La alerta queda registrada en el historial.
+
+#### HU-24: Registrar historial de operación
+- Como sistema, quiero guardar el historial de cada recorrido, para permitir análisis y auditoría posterior.
+- Criterios de aceptación:
+  - Se registran coordenadas, tiempos, estado del camión y alertas.
+  - El historial queda asociado a ruta, camión, operador y zona.
+  - El dato puede consultarse en reportes posteriores.
 
 ## 8. Reglas de negocio principales
 - Cada ruta debe estar asociada a una zona y a un camión asignado.
@@ -120,6 +276,7 @@ El administrador será la pieza central del sistema y tendrá acceso a:
 - El sistema debe registrar todo historial de recorrido, retrasos, paradas y alertas.
 - Una ruta solo puede ser modificada por el operador bajo una condición de excepción o por el administrador.
 - El sistema debe ser escalable a más ciudades, manteniendo la misma estructura de rutas, zonas, camiones y usuarios.
+- Cada ciudad debe mantener su propia configuración de zonas, rutas y usuarios.
 
 ## 9. Alertas y eventos críticos
 El sistema debe detectar y alertar automáticamente cuando:
