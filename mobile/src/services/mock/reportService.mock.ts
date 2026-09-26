@@ -30,19 +30,19 @@ const mockReports: Report[] = [
 ];
 
 export const getMyReports = async (_userId: string): Promise<Report[]> => {
-  await new Promise(resolve => setTimeout(resolve, 500));
+  await new Promise<void>(resolve => setTimeout(resolve, 500));
   return mockReports.filter(r => r.userId === _userId);
 };
 
 export const getReportsByZone = async (_zone: string): Promise<Report[]> => {
-  await new Promise(resolve => setTimeout(resolve, 500));
+  await new Promise<void>(resolve => setTimeout(resolve, 500));
   return mockReports;
 };
 
 export const createReport = async (
   report: Omit<Report, 'id' | 'status' | 'createdAt'>,
 ): Promise<Report> => {
-  await new Promise(resolve => setTimeout(resolve, 800));
+  await new Promise<void>(resolve => setTimeout(resolve, 800));
 
   const newReport: Report = {
     ...report,

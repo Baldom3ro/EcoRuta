@@ -28,9 +28,9 @@
 - [x] 4.1 Splash / inicio
 - [x] 4.2 Login operador
 - [x] 4.3 Home operador
-- [ ] 4.4 Ruta asignada
+- [x] 4.4 Ruta asignada
 - [x] 4.5 Recorrido activo
-- [ ] 4.6 Alertas internas
-- [ ] 4.7 Reporte de incidente
-- [ ] 4.8 Historial del operador
-- [ ] 4.9 Configuración operador
+- [x] 4.6 Alertas internas
+- [x] 4.7 Reporte de incidente
+- [x] 4.8 Historial del operador
+- [x] 4.9 Configuración operador

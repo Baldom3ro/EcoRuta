@@ -22,12 +22,12 @@ const mockUsers: User[] = [
 
 export const loginWithGoogle = async (): Promise<User> => {
   // Simula delay de red
-  await new Promise(resolve => setTimeout(resolve, 1000));
+  await new Promise<void>(resolve => setTimeout(resolve, 1000));
   return mockUsers[0]; // retorna ciudadano por defecto
 };
 
 export const loginWithFacebook = async (): Promise<User> => {
-  await new Promise(resolve => setTimeout(resolve, 1000));
+  await new Promise<void>(resolve => setTimeout(resolve, 1000));
   return mockUsers[0];
 };
 
@@ -35,15 +35,15 @@ export const loginAsDriver = async (
   _email: string,
   _password: string,
 ): Promise<User> => {
-  await new Promise(resolve => setTimeout(resolve, 1000));
+  await new Promise<void>(resolve => setTimeout(resolve, 1000));
   return mockUsers[1];
 };
 
 export const logout = async (): Promise<void> => {
-  await new Promise(resolve => setTimeout(resolve, 500));
+  await new Promise<void>(resolve => setTimeout(resolve, 500));
 };
 
 export const getCurrentUser = async (): Promise<User | null> => {
-  await new Promise(resolve => setTimeout(resolve, 300));
+  await new Promise<void>(resolve => setTimeout(resolve, 300));
   return null; // no hay sesión activa por defecto
 };

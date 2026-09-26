@@ -31,12 +31,12 @@ const mockNotifications: Notification[] = [
 export const getNotifications = async (
   _userId: string,
 ): Promise<Notification[]> => {
-  await new Promise(resolve => setTimeout(resolve, 400));
+  await new Promise<void>(resolve => setTimeout(resolve, 400));
   return mockNotifications;
 };
 
 export const markAsRead = async (notificationId: string): Promise<void> => {
-  await new Promise(resolve => setTimeout(resolve, 200));
+  await new Promise<void>(resolve => setTimeout(resolve, 200));
   const notif = mockNotifications.find(n => n.id === notificationId);
   if (notif) {
     notif.read = true;
@@ -46,7 +46,7 @@ export const markAsRead = async (notificationId: string): Promise<void> => {
 export const reportIncident = async (
   incident: Omit<Incident, 'id' | 'createdAt'>,
 ): Promise<Incident> => {
-  await new Promise(resolve => setTimeout(resolve, 800));
+  await new Promise<void>(resolve => setTimeout(resolve, 800));
 
   return {
     ...incident,
@@ -60,7 +60,7 @@ export const sendZoneAlert = async (
   _zone: string,
   message: string,
 ): Promise<{sent: boolean; usersNotified: number}> => {
-  await new Promise(resolve => setTimeout(resolve, 1000));
+  await new Promise<void>(resolve => setTimeout(resolve, 1000));
 
   // Simula envío de alerta masiva
   return {

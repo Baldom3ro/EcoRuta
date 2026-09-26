@@ -1,28 +1,40 @@
-// Stack de navegación del conductor
+// Stack y Tabs de navegación del conductor (HU-D01, HU-D02, HU-D03, HU-D04)
 import React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {Text} from 'react-native';
 import DriverHomeScreen from '../screens/driver/DriverHomeScreen';
+import AlertsScreen from '../screens/driver/AlertsScreen';
+import ReportIncidentScreen from '../screens/driver/ReportIncidentScreen';
+import HistoryScreen from '../screens/driver/HistoryScreen';
+import DriverSettingsScreen from '../screens/driver/DriverSettingsScreen';
 import {useTheme} from '../context/ThemeContext';
 
 const Tab = createBottomTabNavigator();
+const Stack = createNativeStackNavigator();
 
-// Pantallas placeholder (se crearán en siguientes commits)
-const AlertsPlaceholder = () => (
-  <Text style={{flex: 1, textAlign: 'center', marginTop: 100}}>
-    Alertas
-  </Text>
-);
-const HistoryPlaceholder = () => (
-  <Text style={{flex: 1, textAlign: 'center', marginTop: 100}}>
-    Historial
-  </Text>
-);
-const DriverSettingsPlaceholder = () => (
-  <Text style={{flex: 1, textAlign: 'center', marginTop: 100}}>
-    Configuración
-  </Text>
-);
+const AlertsStack: React.FC = () => {
+  const {colors} = useTheme();
+
+  return (
+    <Stack.Navigator
+      screenOptions={{
+        headerStyle: {backgroundColor: colors.surface},
+        headerTintColor: colors.text,
+      }}>
+      <Stack.Screen
+        name="AlertsList"
+        component={AlertsScreen}
+        options={{title: 'Alertas de Zona'}}
+      />
+      <Stack.Screen
+        name="ReportIncident"
+        component={ReportIncidentScreen}
+        options={{title: 'Reportar Percance'}}
+      />
+    </Stack.Navigator>
+  );
+};
 
 const DriverTabs: React.FC = () => {
   const {colors} = useTheme();
@@ -40,21 +52,22 @@ const DriverTabs: React.FC = () => {
         name="DriverHome"
         component={DriverHomeScreen}
         options={{
-          title: 'Ruta',
+          title: 'Mi Ruta',
           tabBarIcon: ({color}) => <Text style={{color, fontSize: 20}}>🗺️</Text>,
         }}
       />
       <Tab.Screen
-        name="Alerts"
-        component={AlertsPlaceholder}
+        name="AlertsTab"
+        component={AlertsStack}
         options={{
+          headerShown: false,
           title: 'Alertas',
           tabBarIcon: ({color}) => <Text style={{color, fontSize: 20}}>⚠️</Text>,
         }}
       />
       <Tab.Screen
         name="History"
-        component={HistoryPlaceholder}
+        component={HistoryScreen}
         options={{
           title: 'Historial',
           tabBarIcon: ({color}) => <Text style={{color, fontSize: 20}}>📊</Text>,
@@ -62,7 +75,7 @@ const DriverTabs: React.FC = () => {
       />
       <Tab.Screen
         name="DriverSettings"
-        component={DriverSettingsPlaceholder}
+        component={DriverSettingsScreen}
         options={{
           title: 'Ajustes',
           tabBarIcon: ({color}) => <Text style={{color, fontSize: 20}}>⚙️</Text>,

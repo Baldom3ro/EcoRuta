@@ -317,3 +317,11 @@ EcoRuta/
 - SettingsScreen: perfil, zona, toggle tema oscuro, cerrar sesión
 - CitizenTabs actualizado: placeholders reemplazados con pantallas reales
 - Stack de reportes: MyReports → CreateReport (navegación anidada)
+
+### Commit 3 — Pantallas conductor completas
+- DriverHomeScreen: mapa de ruta asignada (HU-D01), estado de recorrido (pausar/iniciar), lista de puntos de recolección
+- AlertsScreen: lista de reportes ciudadanos en la zona (HU-D02) y alertas internas del conductor
+- ReportIncidentScreen: formulario de reporte de percance (HU-D03) con opción de enviar alerta masiva a ciudadanos para suspender ruta (HU-D04)
+- HistoryScreen: historial de rutas realizadas por el operador con duraciones e incidentes
+- DriverSettingsScreen: datos del conductor, camión asignado (ECO-TRUCK-001), estado de turno, modo oscuro y logout
+- DriverTabs actualizado: navegación completa por tabs y stack anidado de alertas e incidentes

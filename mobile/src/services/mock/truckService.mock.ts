@@ -1,5 +1,5 @@
 // Mock de ubicación de camiones
-import {TruckLocation, Route, RoutePoint, Tip} from '../types';
+import {TruckLocation, Route, RoutePoint, Tip, Incident} from '../types';
 
 // Ruta simulada (ajustar coordenadas a tu ciudad)
 const mockRoutePoints: RoutePoint[] = [
@@ -14,7 +14,7 @@ const mockRoutePoints: RoutePoint[] = [
 let currentPointIndex = 0;
 
 export const getTruckLocation = async (): Promise<TruckLocation> => {
-  await new Promise(resolve => setTimeout(resolve, 200));
+  await new Promise<void>(resolve => setTimeout(resolve, 200));
 
   // Simula movimiento del camión por la ruta
   const point = mockRoutePoints[currentPointIndex % mockRoutePoints.length];
@@ -37,7 +37,7 @@ export const getTruckLocation = async (): Promise<TruckLocation> => {
 export const getAssignedRoute = async (
   _driverId: string,
 ): Promise<Route> => {
-  await new Promise(resolve => setTimeout(resolve, 500));
+  await new Promise<void>(resolve => setTimeout(resolve, 500));
 
   return {
     id: 'route-001',
@@ -55,7 +55,7 @@ export const getEstimatedArrival = async (
   _userLatitude: number,
   _userLongitude: number,
 ): Promise<{minutes: number; distance: number}> => {
-  await new Promise(resolve => setTimeout(resolve, 300));
+  await new Promise<void>(resolve => setTimeout(resolve, 300));
 
   return {
     minutes: Math.floor(Math.random() * 30) + 5,
@@ -64,7 +64,7 @@ export const getEstimatedArrival = async (
 };
 
 export const getTips = async (): Promise<Tip[]> => {
-  await new Promise(resolve => setTimeout(resolve, 200));
+  await new Promise<void>(resolve => setTimeout(resolve, 200));
 
   return [
     {
@@ -94,3 +94,68 @@ export const getTips = async (): Promise<Tip[]> => {
     },
   ];
 };
+
+const mockIncidents: Incident[] = [
+  {
+    id: 'inc-001',
+    driverId: 'driver-001',
+    routeId: 'route-001',
+    type: 'road_block',
+    description: 'Calle Morelos bloqueada por obras viales',
+    latitude: 20.6610,
+    longitude: -103.3490,
+    notifiedSupervisor: true,
+    alertSentToUsers: true,
+    createdAt: new Date(Date.now() - 1800000).toISOString(),
+  },
+];
+
+export const reportIncident = async (
+  incident: Omit<Incident, 'id' | 'createdAt'>,
+): Promise<Incident> => {
+  await new Promise<void>(resolve => setTimeout(resolve, 600));
+  const newIncident: Incident = {
+    ...incident,
+    id: `inc-${Date.now()}`,
+    createdAt: new Date().toISOString(),
+  };
+  mockIncidents.push(newIncident);
+  return newIncident;
+};
+
+export const getDriverAlerts = async (_driverId: string): Promise<Incident[]> => {
+  await new Promise<void>(resolve => setTimeout(resolve, 300));
+  return mockIncidents;
+};
+
+export const getDriverHistory = async (_driverId: string) => {
+  await new Promise<void>(resolve => setTimeout(resolve, 400));
+  return [
+    {
+      id: 'hist-001',
+      routeName: 'Ruta Centro - Mañana',
+      date: '2026-09-25',
+      durationMinutes: 115,
+      status: 'completed',
+      incidentsCount: 0,
+    },
+    {
+      id: 'hist-002',
+      routeName: 'Ruta Sur - Tarde',
+      date: '2026-09-24',
+      durationMinutes: 130,
+      status: 'completed',
+      incidentsCount: 1,
+    },
+    {
+      id: 'hist-003',
+      routeName: 'Ruta Norte - Mañana',
+      date: '2026-09-23',
+      durationMinutes: 90,
+      status: 'suspended',
+      incidentsCount: 1,
+    },
+  ];
+};
+
+
