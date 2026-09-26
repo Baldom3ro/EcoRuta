@@ -1,28 +1,41 @@
 // Stack de navegación del ciudadano
 import React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {Text} from 'react-native';
 import CitizenHomeScreen from '../screens/citizen/CitizenHomeScreen';
+import NotificationsScreen from '../screens/citizen/NotificationsScreen';
+import MyReportsScreen from '../screens/citizen/MyReportsScreen';
+import CreateReportScreen from '../screens/citizen/CreateReportScreen';
+import SettingsScreen from '../screens/citizen/SettingsScreen';
 import {useTheme} from '../context/ThemeContext';
 
 const Tab = createBottomTabNavigator();
+const ReportsStack = createNativeStackNavigator();
 
-// Pantallas placeholder (se crearán en siguientes commits)
-const NotificationsPlaceholder = () => (
-  <Text style={{flex: 1, textAlign: 'center', marginTop: 100}}>
-    Notificaciones
-  </Text>
-);
-const ReportsPlaceholder = () => (
-  <Text style={{flex: 1, textAlign: 'center', marginTop: 100}}>
-    Mis Reportes
-  </Text>
-);
-const SettingsPlaceholder = () => (
-  <Text style={{flex: 1, textAlign: 'center', marginTop: 100}}>
-    Configuración
-  </Text>
-);
+// Stack de reportes: Mis Reportes → Crear Reporte
+const ReportsStackScreen: React.FC = () => {
+  const {colors} = useTheme();
+
+  return (
+    <ReportsStack.Navigator
+      screenOptions={{
+        headerStyle: {backgroundColor: colors.surface},
+        headerTintColor: colors.text,
+      }}>
+      <ReportsStack.Screen
+        name="MyReports"
+        component={MyReportsScreen}
+        options={{title: 'Mis Reportes'}}
+      />
+      <ReportsStack.Screen
+        name="CreateReport"
+        component={CreateReportScreen}
+        options={{title: 'Nuevo Reporte'}}
+      />
+    </ReportsStack.Navigator>
+  );
+};
 
 const CitizenTabs: React.FC = () => {
   const {colors} = useTheme();
@@ -46,7 +59,7 @@ const CitizenTabs: React.FC = () => {
       />
       <Tab.Screen
         name="Notifications"
-        component={NotificationsPlaceholder}
+        component={NotificationsScreen}
         options={{
           title: 'Alertas',
           tabBarIcon: ({color}) => <Text style={{color, fontSize: 20}}>🔔</Text>,
@@ -54,15 +67,16 @@ const CitizenTabs: React.FC = () => {
       />
       <Tab.Screen
         name="Reports"
-        component={ReportsPlaceholder}
+        component={ReportsStackScreen}
         options={{
           title: 'Reportes',
+          headerShown: false,
           tabBarIcon: ({color}) => <Text style={{color, fontSize: 20}}>📋</Text>,
         }}
       />
       <Tab.Screen
         name="Settings"
-        component={SettingsPlaceholder}
+        component={SettingsScreen}
         options={{
           title: 'Ajustes',
           tabBarIcon: ({color}) => <Text style={{color, fontSize: 20}}>⚙️</Text>,

@@ -309,3 +309,11 @@ EcoRuta/
 - Pantallas: Splash, Login, CitizenHome, DriverHome (con placeholders para tabs)
 - GitHub Actions CI: TypeScript check, tests, lint
 - Dependencias: @react-navigation/native, bottom-tabs, native-stack, react-native-screens, safe-area-context
+
+### Commit 2 — Pantallas ciudadano completas
+- NotificationsScreen: lista con iconos por tipo, marcado como leído, indicador de no leído
+- CreateReportScreen: selector tipo (no pasó basura, contenedor lleno, acceso bloqueado, otro), descripción, foto opcional
+- MyReportsScreen: lista de reportes con badges de estado (pendiente/revisión/resuelto)
+- SettingsScreen: perfil, zona, toggle tema oscuro, cerrar sesión
+- CitizenTabs actualizado: placeholders reemplazados con pantallas reales
+- Stack de reportes: MyReports → CreateReport (navegación anidada)
