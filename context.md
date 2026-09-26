@@ -325,3 +325,8 @@ EcoRuta/
 - HistoryScreen: historial de rutas realizadas por el operador con duraciones e incidentes
 - DriverSettingsScreen: datos del conductor, camión asignado (ECO-TRUCK-001), estado de turno, modo oscuro y logout
 - DriverTabs actualizado: navegación completa por tabs y stack anidado de alertas e incidentes
+
+### Commit 4 — Soporte Web con React Native Web + Vite (estilo Ionic serve)
+- Integrado React Native Web y Vite para visualizar la app instantáneamente en el navegador web
+- Configurado index.html, index.web.tsx y vite.config.ts con shims web
+- Añadido script `npm run web` en package.json para probar sin emulador Android super ligero
