@@ -20,6 +20,8 @@ export type IconName =
   | 'lightbulb'
   | 'check-circle'
   | 'chevron-right'
+  | 'chevron-down'
+  | 'chevron-up'
   | 'play'
   | 'pause'
   | 'wrench'
@@ -178,6 +180,18 @@ export const Icon: React.FC<IconProps> = ({
       return (
         <Svg {...commonProps}>
           <Polyline points="9 18 15 12 9 6" />
+        </Svg>
+      );
+    case 'chevron-down':
+      return (
+        <Svg {...commonProps}>
+          <Polyline points="6 9 12 15 18 9" />
+        </Svg>
+      );
+    case 'chevron-up':
+      return (
+        <Svg {...commonProps}>
+          <Polyline points="18 15 12 9 6 15" />
         </Svg>
       );
     case 'play':

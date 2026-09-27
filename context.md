@@ -383,3 +383,9 @@ EcoRuta/
 - Añadido modal desplegable con animación slide que muestra la lista completa de puntos de recolección (tanto los visitados como los pendientes)
 - Añadido icono SVG `x` en `src/components/Icon.tsx` para cierre de modales
 - Validado paso limpio de `npx tsc --noEmit` y `npm run lint` (0 errores, 0 advertencias)
+
+### Commit 14 — Ubicación de Puntos sobre Botones con Desplegable Inline sobre el Mapa
+- Movida la tarjeta flotante de puntos de recolección a la parte inferior de la pantalla, ubicada directamente sobre los botones de "Pausar Recorrido" y "Reportar Percance"
+- Eliminado el Modal emergente; el desplegable ahora se extiende inline sobre la misma tarjeta flotante del mapa
+- Añadidos íconos SVG `chevron-down` y `chevron-up` a `src/components/Icon.tsx` para indicar la expansión y colapso de la lista de puntos
+- Validado paso limpio de `npx tsc --noEmit` y `npm run lint` (0 errores, 0 advertencias)

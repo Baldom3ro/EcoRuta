@@ -1,11 +1,10 @@
-// Home Conductor - Mapa a Pantalla Completa con Islas Flotantes y Desplegable de Puntos (GIS Style)
+// Home Conductor - Mapa a Pantalla Completa con Islas Flotantes y Desplegable Inline en Fondo (GIS Style)
 import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
   StyleSheet,
   TouchableOpacity,
-  Modal,
   ScrollView,
   ActivityIndicator,
 } from 'react-native';
@@ -21,7 +20,7 @@ const DriverHomeScreen: React.FC<{navigation: any}> = ({navigation}) => {
   const [route, setRoute] = useState<Route | null>(null);
   const [loading, setLoading] = useState(true);
   const [shiftStatus, setShiftStatus] = useState<'pending' | 'active' | 'completed'>('active');
-  const [showAllPointsModal, setShowAllPointsModal] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(false);
 
   useEffect(() => {
     const fetchRoute = async () => {
@@ -98,108 +97,63 @@ const DriverHomeScreen: React.FC<{navigation: any}> = ({navigation}) => {
         </Text>
       </View>
 
-      {/* 3. ISLA FLOTANTE: SIGUIENTE PUNTO PENDIENTE */}
-      <View style={styles.floatingPointContainer}>
-        <TouchableOpacity
-          style={[styles.nextPointCard, {backgroundColor: colors.surface, borderColor: colors.border}]}
-          onPress={() => setShowAllPointsModal(true)}
-          activeOpacity={0.8}>
-          <View style={styles.nextPointHeader}>
+      {/* 3. ISLA FLOTANTE INFERIOR: TARJETA DE PUNTOS Y BOTONES DE ACCIÓN */}
+      <View style={styles.bottomFloatingContainer}>
+        {/* TARJETA DESPLEGABLE INLINE SOBRE LOS BOTONES */}
+        <View
+          style={[
+            styles.floatingPointsCard,
+            {backgroundColor: colors.surface, borderColor: colors.border},
+          ]}>
+          {/* ENCABEZADO TOQUABLE PARA DESPLEGAR / COLAPSAR */}
+          <TouchableOpacity
+            style={styles.pointsHeaderRow}
+            onPress={() => setIsExpanded(prev => !prev)}
+            activeOpacity={0.7}>
             <View style={styles.btnRow}>
               <Icon name="map-pin" size={16} color={colors.primary} />
-              <Text style={[styles.nextPointBadgeText, {color: colors.primary}]}>
-                SIGUIENTE PUNTO PENDIENTE
+              <Text style={[styles.pointsBadgeText, {color: colors.primary}]}>
+                {isExpanded
+                  ? `PUNTOS DE RECOLECCIÓN (${points.length})`
+                  : 'SIGUIENTE PUNTO PENDIENTE'}
               </Text>
             </View>
+
             <View style={styles.expandBadge}>
               <Text style={[styles.expandText, {color: colors.textSecondary}]}>
-                Ver todos ({points.length})
+                {isExpanded ? 'Ocultar' : `Ver todos (${points.length})`}
               </Text>
-              <Icon name="chevron-right" size={14} color={colors.textSecondary} />
-            </View>
-          </View>
-
-          <View style={styles.nextPointContent}>
-            <View style={[styles.pointDot, {backgroundColor: colors.warning}]}>
-              <Text style={styles.pointNum}>{nextPendingPoint.order}</Text>
-            </View>
-            <View style={styles.pointInfo}>
-              <Text style={[styles.pointLabel, {color: colors.text}]}>
-                {nextPendingPoint.label || `Punto ${nextPendingPoint.order}`}
-              </Text>
-              <Text style={[styles.pointCoords, {color: colors.textSecondary}]}>
-                {nextPendingPoint.latitude.toFixed(4)}, {nextPendingPoint.longitude.toFixed(4)}
-              </Text>
-            </View>
-            <View style={[styles.pendingTag, {backgroundColor: colors.warning + '20'}]}>
-              <Text style={[styles.pendingTagText, {color: colors.warning}]}>Pendiente</Text>
-            </View>
-          </View>
-        </TouchableOpacity>
-      </View>
-
-      {/* 4. CONTROLES FLOTANTES INFERIORES */}
-      <View style={styles.bottomFloatingContainer}>
-        <View style={styles.controlsRow}>
-          <TouchableOpacity
-            style={[
-              styles.actionButton,
-              {
-                backgroundColor:
-                  shiftStatus === 'active' ? colors.warning : colors.primary,
-              },
-            ]}
-            onPress={toggleShift}>
-            <View style={styles.btnRow}>
               <Icon
-                name={shiftStatus === 'active' ? 'pause' : 'play'}
-                size={18}
-                color="#FFFFFF"
+                name={isExpanded ? 'chevron-down' : 'chevron-up'}
+                size={14}
+                color={colors.textSecondary}
               />
-              <Text style={styles.actionText}>
-                {shiftStatus === 'active' ? 'Pausar Recorrido' : 'Iniciar Recorrido'}
-              </Text>
             </View>
           </TouchableOpacity>
 
-          <TouchableOpacity
-            style={[styles.actionButton, {backgroundColor: colors.error}]}
-            onPress={() => navigation.navigate('AlertsTab', {screen: 'ReportIncident'})}>
-            <View style={styles.btnRow}>
-              <Icon name="alert" size={18} color="#FFFFFF" />
-              <Text style={styles.actionText}>Reportar Percance</Text>
-            </View>
-          </TouchableOpacity>
-        </View>
-      </View>
-
-      {/* MODAL DESPLEGABLE: TODOS LOS PUNTOS DE RECOLECCIÓN */}
-      <Modal
-        visible={showAllPointsModal}
-        animationType="slide"
-        transparent={true}
-        onRequestClose={() => setShowAllPointsModal(false)}>
-        <View style={styles.modalOverlay}>
-          <View style={[styles.modalContent, {backgroundColor: colors.surface}]}>
-            <View style={styles.modalHeader}>
-              <View style={styles.btnRow}>
-                <Icon name="map-pin" size={20} color={colors.primaryDark} />
-                <Text style={[styles.modalTitle, {color: colors.primaryDark}]}>
-                  Puntos de Recolección ({points.length})
+          {/* CONTENIDO: SOLO EL SIGUIENTE O LA LISTA COMPLETA */}
+          {!isExpanded ? (
+            <TouchableOpacity
+              style={styles.nextPointContent}
+              onPress={() => setIsExpanded(true)}
+              activeOpacity={0.8}>
+              <View style={[styles.pointDot, {backgroundColor: colors.warning}]}>
+                <Text style={styles.pointNum}>{nextPendingPoint.order}</Text>
+              </View>
+              <View style={styles.pointInfo}>
+                <Text style={[styles.pointLabel, {color: colors.text}]}>
+                  {nextPendingPoint.label || `Punto ${nextPendingPoint.order}`}
+                </Text>
+                <Text style={[styles.pointCoords, {color: colors.textSecondary}]}>
+                  {nextPendingPoint.latitude.toFixed(4)}, {nextPendingPoint.longitude.toFixed(4)}
                 </Text>
               </View>
-              <TouchableOpacity
-                style={[styles.closeBtn, {backgroundColor: colors.border + '40'}]}
-                onPress={() => setShowAllPointsModal(false)}>
-                <Icon name="x" size={18} color={colors.text} />
-              </TouchableOpacity>
-            </View>
-
-            <Text style={[styles.modalSubtitle, {color: colors.textSecondary}]}>
-              Recorrido asignado en {route ? route.zone : 'Zona Centro'}
-            </Text>
-
-            <ScrollView style={styles.pointsList} showsVerticalScrollIndicator={false}>
+              <View style={[styles.pendingTag, {backgroundColor: colors.warning + '20'}]}>
+                <Text style={[styles.pendingTagText, {color: colors.warning}]}>Pendiente</Text>
+              </View>
+            </TouchableOpacity>
+          ) : (
+            <ScrollView style={styles.expandedPointsList} showsVerticalScrollIndicator={false}>
               {loading ? (
                 <ActivityIndicator size="small" color={colors.primary} />
               ) : (
@@ -210,7 +164,7 @@ const DriverHomeScreen: React.FC<{navigation: any}> = ({navigation}) => {
                     <View
                       key={pt.order}
                       style={[
-                        styles.modalPointRow,
+                        styles.pointRowInline,
                         isNext && styles.nextPointHighlight,
                       ]}>
                       <View
@@ -243,7 +197,7 @@ const DriverHomeScreen: React.FC<{navigation: any}> = ({navigation}) => {
 
                       <View
                         style={[
-                          styles.statusBadgeModal,
+                          styles.statusBadgeInline,
                           {
                             backgroundColor: isVisited
                               ? colors.success + '20'
@@ -254,7 +208,7 @@ const DriverHomeScreen: React.FC<{navigation: any}> = ({navigation}) => {
                         ]}>
                         <Text
                           style={[
-                            styles.statusBadgeModalText,
+                            styles.statusBadgeInlineText,
                             {
                               color: isVisited
                                 ? colors.success
@@ -271,9 +225,42 @@ const DriverHomeScreen: React.FC<{navigation: any}> = ({navigation}) => {
                 })
               )}
             </ScrollView>
-          </View>
+          )}
         </View>
-      </Modal>
+
+        {/* BOTONES DE ACCIÓN (PAUSAR & REPORTAR PERCANCE) */}
+        <View style={styles.controlsRow}>
+          <TouchableOpacity
+            style={[
+              styles.actionButton,
+              {
+                backgroundColor:
+                  shiftStatus === 'active' ? colors.warning : colors.primary,
+              },
+            ]}
+            onPress={toggleShift}>
+            <View style={styles.btnRow}>
+              <Icon
+                name={shiftStatus === 'active' ? 'pause' : 'play'}
+                size={18}
+                color="#FFFFFF"
+              />
+              <Text style={styles.actionText}>
+                {shiftStatus === 'active' ? 'Pausar Recorrido' : 'Iniciar Recorrido'}
+              </Text>
+            </View>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={[styles.actionButton, {backgroundColor: colors.error}]}
+            onPress={() => navigation.navigate('AlertsTab', {screen: 'ReportIncident'})}>
+            <View style={styles.btnRow}>
+              <Icon name="alert" size={18} color="#FFFFFF" />
+              <Text style={styles.actionText}>Reportar Percance</Text>
+            </View>
+          </TouchableOpacity>
+        </View>
+      </View>
     </View>
   );
 };
@@ -321,14 +308,15 @@ const styles = StyleSheet.create({
   routeMeta: {
     fontSize: Typography.sizes.xs,
   },
-  floatingPointContainer: {
+  bottomFloatingContainer: {
     position: 'absolute',
-    top: 90,
+    bottom: Spacing.md,
     left: Spacing.md,
     right: Spacing.md,
+    gap: Spacing.sm,
     zIndex: 10,
   },
-  nextPointCard: {
+  floatingPointsCard: {
     padding: Spacing.md,
     borderRadius: BorderRadius.lg,
     borderWidth: 1,
@@ -338,13 +326,12 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.15,
     shadowRadius: 4,
   },
-  nextPointHeader: {
+  pointsHeaderRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: Spacing.xs,
   },
-  nextPointBadgeText: {
+  pointsBadgeText: {
     fontSize: Typography.sizes.xs,
     fontWeight: 'bold',
     letterSpacing: 0.5,
@@ -352,7 +339,7 @@ const styles = StyleSheet.create({
   expandBadge: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 2,
+    gap: 4,
   },
   expandText: {
     fontSize: Typography.sizes.xs,
@@ -361,7 +348,10 @@ const styles = StyleSheet.create({
   nextPointContent: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingTop: 4,
+    paddingTop: Spacing.xs,
+    marginTop: Spacing.xs,
+    borderTopWidth: StyleSheet.hairlineWidth,
+    borderTopColor: '#CCCCCC33',
   },
   pointDot: {
     width: 28,
@@ -373,7 +363,9 @@ const styles = StyleSheet.create({
   },
   pointNum: {color: '#FFFFFF', fontSize: Typography.sizes.xs, fontWeight: 'bold'},
   pointInfo: {flex: 1},
-  pointLabel: {fontSize: Typography.sizes.sm, fontWeight: '600'},
+  pointLabel: {fontSize: Typography.sizes.sm},
+  pointLabelBold: {fontWeight: 'bold'},
+  pointLabelNormal: {fontWeight: '600'},
   pointCoords: {fontSize: Typography.sizes.xs},
   pendingTag: {
     paddingHorizontal: 8,
@@ -384,12 +376,33 @@ const styles = StyleSheet.create({
     fontSize: Typography.sizes.xs,
     fontWeight: 'bold',
   },
-  bottomFloatingContainer: {
-    position: 'absolute',
-    bottom: Spacing.md,
-    left: Spacing.md,
-    right: Spacing.md,
-    zIndex: 10,
+  expandedPointsList: {
+    maxHeight: 240,
+    marginTop: Spacing.xs,
+    paddingTop: Spacing.xs,
+    borderTopWidth: StyleSheet.hairlineWidth,
+    borderTopColor: '#CCCCCC33',
+  },
+  pointRowInline: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: Spacing.xs,
+    paddingHorizontal: 4,
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderBottomColor: '#CCCCCC22',
+  },
+  nextPointHighlight: {
+    backgroundColor: '#2E7D3215',
+    borderRadius: 8,
+  },
+  statusBadgeInline: {
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 8,
+  },
+  statusBadgeInlineText: {
+    fontSize: Typography.sizes.xs,
+    fontWeight: 'bold',
   },
   controlsRow: {
     flexDirection: 'row',
@@ -407,69 +420,8 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
   },
   actionText: {color: '#FFFFFF', fontSize: Typography.sizes.xs, fontWeight: 'bold'},
-  modalOverlay: {
-    flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    justifyContent: 'flex-end',
-  },
-  modalContent: {
-    borderTopLeftRadius: 24,
-    borderTopRightRadius: 24,
-    padding: Spacing.md,
-    maxHeight: '75%',
-  },
-  modalHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 4,
-  },
-  modalTitle: {
-    fontSize: Typography.sizes.md,
-    fontWeight: 'bold',
-  },
-  closeBtn: {
-    width: 32,
-    height: 32,
-    borderRadius: 16,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  modalSubtitle: {
-    fontSize: Typography.sizes.xs,
-    marginBottom: Spacing.md,
-  },
-  pointsList: {
-    maxHeight: 400,
-  },
-  modalPointRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingVertical: Spacing.sm,
-    paddingHorizontal: Spacing.xs,
-    borderBottomWidth: StyleSheet.hairlineWidth,
-    borderBottomColor: '#CCCCCC33',
-  },
-  nextPointHighlight: {
-    backgroundColor: '#2E7D3215',
-    borderRadius: 12,
-  },
-  pointLabelBold: {
-    fontWeight: 'bold',
-  },
-  pointLabelNormal: {
-    fontWeight: '600',
-  },
-  statusBadgeModal: {
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 8,
-  },
-  statusBadgeModalText: {
-    fontSize: Typography.sizes.xs,
-    fontWeight: 'bold',
-  },
 });
 
 export default DriverHomeScreen;
+
 
