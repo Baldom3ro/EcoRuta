@@ -371,3 +371,8 @@ EcoRuta/
 - Añadida barra flotante superior con badge de zona y botón flotante circular de notificaciones con badge rojo contador de no leídas (redirecciona a `NotificationsScreen`)
 - Organizadas las tarjetas de ETA, consejos y botón de reporte como islas flotantes con sombras y bordes redondeados sobre el mapa
 - Validado paso limpio de `npx tsc --noEmit` y `npm run lint` (0 errores, 0 advertencias)
+
+### Commit 12 — Visualización completa multilínea de sugerencias sin truncado
+- Eliminada restricción `numberOfLines={1}` de `floatingTipText` en `CitizenHomeScreen.tsx`
+- Ajustado padding y flexibilidad de `floatingTipCard` para permitir lectura completa de tips y recomendaciones ecológicas en múltiples líneas sin truncarse con "..."
+- Validado paso limpio de `npx tsc --noEmit` y `npm run lint` (0 errores, 0 advertencias)

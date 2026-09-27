@@ -130,8 +130,8 @@ const CitizenHomeScreen: React.FC<{navigation: any}> = ({navigation}) => {
               {backgroundColor: colors.surface, borderColor: colors.border},
             ]}
             onPress={nextTip}>
-            <Icon name="lightbulb" size={18} color={colors.primary} />
-            <Text style={[styles.floatingTipText, {color: colors.text}]} numberOfLines={1}>
+            <Icon name="lightbulb" size={20} color={colors.primary} />
+            <Text style={[styles.floatingTipText, {color: colors.text}]}>
               {tips[currentTipIndex]?.message}
             </Text>
             <Icon name="chevron-right" size={16} color={colors.textSecondary} />
@@ -285,10 +285,10 @@ const styles = StyleSheet.create({
   floatingTipCard: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: Spacing.xs,
+    gap: Spacing.sm,
     paddingHorizontal: Spacing.md,
-    paddingVertical: Spacing.sm,
-    borderRadius: BorderRadius.md,
+    paddingVertical: Spacing.md,
+    borderRadius: BorderRadius.lg,
     borderWidth: 1,
     elevation: 4,
     shadowColor: '#000000',
@@ -298,7 +298,9 @@ const styles = StyleSheet.create({
   },
   floatingTipText: {
     flex: 1,
-    fontSize: Typography.sizes.xs,
+    fontSize: Typography.sizes.sm,
+    lineHeight: 18,
+    fontWeight: '500',
   },
   floatingReportBtn: {
     padding: Spacing.md,
