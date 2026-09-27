@@ -1,14 +1,14 @@
 // Mock de ubicación de camiones
 import {TruckLocation, Route, RoutePoint, Tip, Incident} from '../types';
 
-// Ruta simulada (ajustar coordenadas a tu ciudad)
+// Ruta simulada en Gutiérrez Zamora, Veracruz
 const mockRoutePoints: RoutePoint[] = [
-  {latitude: 20.6600, longitude: -103.3500, order: 1, label: 'Inicio'},
-  {latitude: 20.6610, longitude: -103.3490, order: 2, label: 'Calle Morelos'},
-  {latitude: 20.6625, longitude: -103.3475, order: 3, label: 'Av. Juárez'},
-  {latitude: 20.6640, longitude: -103.3460, order: 4, label: 'Plaza Central'},
-  {latitude: 20.6655, longitude: -103.3445, order: 5, label: 'Col. San Marcos'},
-  {latitude: 20.6670, longitude: -103.3430, order: 6, label: 'Final'},
+  {latitude: 20.4500, longitude: -97.0910, order: 1, label: 'Entrada Norte - Av. Hidalgo'},
+  {latitude: 20.4520, longitude: -97.0890, order: 2, label: 'Calle Revolución'},
+  {latitude: 20.4536, longitude: -97.0876, order: 3, label: 'Parque Central Gutiérrez Zamora'},
+  {latitude: 20.4550, longitude: -97.0850, order: 4, label: 'Malecón Río Tecolutla'},
+  {latitude: 20.4570, longitude: -97.0820, order: 5, label: 'Colonia El Carmen'},
+  {latitude: 20.4590, longitude: -97.0800, order: 6, label: 'Base Operativa'},
 ];
 
 let currentPointIndex = 0;
@@ -101,9 +101,9 @@ const mockIncidents: Incident[] = [
     driverId: 'driver-001',
     routeId: 'route-001',
     type: 'road_block',
-    description: 'Calle Morelos bloqueada por obras viales',
-    latitude: 20.6610,
-    longitude: -103.3490,
+    description: 'Av. Manuel Ávila Camacho bloqueada por desfile local',
+    latitude: 20.4536,
+    longitude: -97.0876,
     notifiedSupervisor: true,
     alertSentToUsers: true,
     createdAt: new Date(Date.now() - 1800000).toISOString(),

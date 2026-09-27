@@ -359,3 +359,8 @@ EcoRuta/
 - Creado shim `src/shims/react-native-svg.web.tsx` mapeado en `vite.config.ts` para resolver incompatibilidades de `react-native-svg` con `react-native-web`
 - Resuelto error `[MISSING_EXPORT] "default" is not exported by "node_modules/react-native-web/dist/index.js"` al ejecutar `npm run web`
 - Validado paso limpio de `npx tsc --noEmit` y `npm run lint` (0 errores, 0 advertencias)
+
+### Commit 10 — Preservación de zoom del mapa y actualización a Gutiérrez Zamora, Veracruz
+- Modificado `MapView.tsx` utilizando `useRef` e interconexión `postMessage` para actualizar únicamente la posición del marcador del camión en tiempo real sin recargar la plantilla de Leaflet, preservando el zoom y la vista ajustada por el usuario
+- Actualizadas las coordenadas de la ruta y mapas por defecto a Gutiérrez Zamora, Veracruz (`20.4536`, `-97.0876`) en `MapView.tsx`, `truckService.mock.ts`, `reportService.mock.ts`, `CitizenHomeScreen.tsx` y `DriverHomeScreen.tsx`
+- Validado paso limpio de `npx tsc --noEmit` y `npm run lint` (0 errores, 0 advertencias)

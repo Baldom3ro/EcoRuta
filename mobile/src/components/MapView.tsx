@@ -1,6 +1,4 @@
-// Componente de Mapa Interactivo con OpenStreetMap y Leaflet JS
-// Funciona en Web y Móvil sin requerir llaves de Google Maps
-import React from 'react';
+import React, {useRef, useEffect} from 'react';
 import {View, StyleSheet, StyleProp, ViewStyle} from 'react-native';
 
 export interface MapViewProps {
@@ -22,19 +20,21 @@ const iframeStyle: React.CSSProperties = {
 };
 
 const MapView: React.FC<MapViewProps> = ({
-  latitude = 20.6625,
-  longitude = -103.3475,
-  zoom = 14,
-  truckLatitude = 20.6610,
-  truckLongitude = -103.3490,
+  latitude = 20.4536,
+  longitude = -97.0876,
+  zoom = 15,
+  truckLatitude = 20.4520,
+  truckLongitude = -97.0890,
   truckName = 'Camión EcoRuta 001',
   routePoints = [],
   style,
 }) => {
-  // Genera el HTML autocontenido con Leaflet y tiles de OpenStreetMap
-  const pointsJson = JSON.stringify(routePoints);
+  const iframeRef = useRef<HTMLIFrameElement>(null);
+  const htmlRef = useRef<string | null>(null);
 
-  const leafletHtml = `
+  // Genera el HTML autocontenido solo una vez al montar para no reiniciar zoom
+  if (!htmlRef.current) {
+    htmlRef.current = `
     <!DOCTYPE html>
     <html>
       <head>
@@ -74,15 +74,9 @@ const MapView: React.FC<MapViewProps> = ({
       <body>
         <div id="map"></div>
         <script>
-          const centerLat = ${latitude};
-          const centerLng = ${longitude};
-          const truckLat = ${truckLatitude};
-          const truckLng = ${truckLongitude};
-          const points = ${pointsJson};
-
           const map = L.map('map', {
             zoomControl: false,
-          }).setView([centerLat, centerLng], ${zoom});
+          }).setView([${latitude}, ${longitude}], ${zoom});
 
           L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '© OpenStreetMap',
@@ -98,12 +92,21 @@ const MapView: React.FC<MapViewProps> = ({
             iconSize: [32, 32],
             iconAnchor: [16, 16]
           });
-          L.marker([truckLat, truckLng], { icon: truckIcon })
+          const truckMarker = L.marker([${truckLatitude}, ${truckLongitude}], { icon: truckIcon })
             .addTo(map)
-            .bindPopup('<b>${truckName}</b><br/>En movimiento')
-            .openPopup();
+            .bindPopup('<b>${truckName}</b><br/>En movimiento');
+
+          // Actualiza ubicación del camión por mensajes postMessage sin reiniciar zoom
+          window.addEventListener('message', function(event) {
+            if (event.data && event.data.type === 'UPDATE_TRUCK') {
+              if (truckMarker) {
+                truckMarker.setLatLng([event.data.lat, event.data.lng]);
+              }
+            }
+          });
 
           // Puntos de ruta
+          const points = ${JSON.stringify(routePoints)};
           if (points && points.length > 0) {
             const latLngs = [];
             points.forEach((pt, idx) => {
@@ -131,13 +134,25 @@ const MapView: React.FC<MapViewProps> = ({
       </body>
     </html>
   `;
+  }
+
+  // Envía actualización mediante postMessage cuando cambian las coordenadas del camión
+  useEffect(() => {
+    if (iframeRef.current && iframeRef.current.contentWindow) {
+      iframeRef.current.contentWindow.postMessage(
+        {type: 'UPDATE_TRUCK', lat: truckLatitude, lng: truckLongitude},
+        '*',
+      );
+    }
+  }, [truckLatitude, truckLongitude]);
 
   return (
     <View style={[styles.container, style]}>
       <iframe
-        srcDoc={leafletHtml}
+        ref={iframeRef}
+        srcDoc={htmlRef.current || ''}
         style={iframeStyle}
-        title="OpenStreetMap EcoRuta"
+        title="OpenStreetMap EcoRuta Gutiérrez Zamora"
       />
     </View>
   );

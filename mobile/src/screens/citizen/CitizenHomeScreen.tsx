@@ -107,17 +107,17 @@ const CitizenHomeScreen: React.FC<{navigation: any}> = ({navigation}) => {
       {/* Mapa Interactivo OpenStreetMap (wireframes.md 3.3) */}
       <View style={[styles.mapCard, {borderColor: colors.border}]}>
         <MapView
-          latitude={20.6625}
-          longitude={-103.3475}
-          truckLatitude={truckLoc ? truckLoc.latitude : 20.6610}
-          truckLongitude={truckLoc ? truckLoc.longitude : -103.3490}
+          latitude={20.4536}
+          longitude={-97.0876}
+          truckLatitude={truckLoc ? truckLoc.latitude : 20.4520}
+          truckLongitude={truckLoc ? truckLoc.longitude : -97.0890}
           truckName={truckLoc ? truckLoc.driverName : 'Carlos Rodríguez'}
           routePoints={[
-            {latitude: 20.6600, longitude: -103.3500, order: 1, label: 'Inicio Ruta'},
-            {latitude: 20.6610, longitude: -103.3490, order: 2, label: 'Calle Morelos'},
-            {latitude: 20.6625, longitude: -103.3475, order: 3, label: 'Av. Juárez'},
-            {latitude: 20.6640, longitude: -103.3460, order: 4, label: 'Plaza Central'},
-            {latitude: 20.6655, longitude: -103.3445, order: 5, label: 'Col. San Marcos'},
+            {latitude: 20.4500, longitude: -97.0910, order: 1, label: 'Entrada Norte - Av. Hidalgo'},
+            {latitude: 20.4520, longitude: -97.0890, order: 2, label: 'Calle Revolución'},
+            {latitude: 20.4536, longitude: -97.0876, order: 3, label: 'Parque Central Gutiérrez Zamora'},
+            {latitude: 20.4550, longitude: -97.0850, order: 4, label: 'Malecón Río Tecolutla'},
+            {latitude: 20.4570, longitude: -97.0820, order: 5, label: 'Colonia El Carmen'},
           ]}
         />
       </View>
