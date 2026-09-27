@@ -364,3 +364,10 @@ EcoRuta/
 - Modificado `MapView.tsx` utilizando `useRef` e interconexión `postMessage` para actualizar únicamente la posición del marcador del camión en tiempo real sin recargar la plantilla de Leaflet, preservando el zoom y la vista ajustada por el usuario
 - Actualizadas las coordenadas de la ruta y mapas por defecto a Gutiérrez Zamora, Veracruz (`20.4536`, `-97.0876`) en `MapView.tsx`, `truckService.mock.ts`, `reportService.mock.ts`, `CitizenHomeScreen.tsx` y `DriverHomeScreen.tsx`
 - Validado paso limpio de `npx tsc --noEmit` y `npm run lint` (0 errores, 0 advertencias)
+
+### Commit 11 — Rediseño GIS con Mapa Fullscreen e Islas Flotantes en Home Ciudadano
+- Rediseñada la pantalla `CitizenHomeScreen.tsx` haciendo que el mapa ocupe el 100% de la pantalla como fondo principal (`StyleSheet.absoluteFill`)
+- Eliminado el saludo excesivo ("Hola, María García") para enfocar la interfaz en el rastreo del camión
+- Añadida barra flotante superior con badge de zona y botón flotante circular de notificaciones con badge rojo contador de no leídas (redirecciona a `NotificationsScreen`)
+- Organizadas las tarjetas de ETA, consejos y botón de reporte como islas flotantes con sombras y bordes redondeados sobre el mapa
+- Validado paso limpio de `npx tsc --noEmit` y `npm run lint` (0 errores, 0 advertencias)

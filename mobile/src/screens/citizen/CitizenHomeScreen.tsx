@@ -1,18 +1,17 @@
-// Home Ciudadano (Estructura fiel a wireframes.md 3.3, views.md y design-system.md)
+// Home Ciudadano - Mapa a Pantalla Completa con Islas Flotantes (GIS Style)
 import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
   StyleSheet,
   TouchableOpacity,
-  ScrollView,
 } from 'react-native';
 import {useTheme} from '../../context/ThemeContext';
 import {useAuth} from '../../context/AuthContext';
 import MapView from '../../components/MapView';
 import {Icon} from '../../components/Icon';
 import {TruckService, NotificationService} from '../../services';
-import {TruckLocation, Tip, Notification} from '../../services/types';
+import {TruckLocation, Tip} from '../../services/types';
 import {Typography, Spacing, BorderRadius} from '../../theme';
 
 const CitizenHomeScreen: React.FC<{navigation: any}> = ({navigation}) => {
@@ -20,7 +19,7 @@ const CitizenHomeScreen: React.FC<{navigation: any}> = ({navigation}) => {
   const {user} = useAuth();
   const [truckLoc, setTruckLoc] = useState<TruckLocation | null>(null);
   const [tips, setTips] = useState<Tip[]>([]);
-  const [recentNotifs, setRecentNotifs] = useState<Notification[]>([]);
+  const [unreadCount, setUnreadCount] = useState(0);
   const [currentTipIndex, setCurrentTipIndex] = useState(0);
 
   useEffect(() => {
@@ -31,7 +30,7 @@ const CitizenHomeScreen: React.FC<{navigation: any}> = ({navigation}) => {
         const notifs = await NotificationService.getNotifications(user?.id || 'citizen-001');
         setTruckLoc(loc);
         setTips(tipsData);
-        setRecentNotifs(notifs.slice(0, 2));
+        setUnreadCount(notifs.filter(n => !n.read).length);
       } catch {
         // Ignorar
       }
@@ -53,59 +52,9 @@ const CitizenHomeScreen: React.FC<{navigation: any}> = ({navigation}) => {
   };
 
   return (
-    <ScrollView
-      style={[styles.container, {backgroundColor: colors.background}]}
-      contentContainerStyle={styles.content}>
-      {/* Top Bar (wireframes.md 3.3) */}
-      <View style={[styles.topBar, {backgroundColor: colors.surface, borderColor: colors.border}]}>
-        <View style={styles.userInfo}>
-          <Text style={[styles.greeting, {color: colors.textSecondary}]}>
-            Hola, {user?.name || 'María García'}
-          </Text>
-          <View style={[styles.zoneBadge, {backgroundColor: colors.primaryLight + '40'}]}>
-            <View style={styles.badgeRow}>
-              <Icon name="map-pin" size={12} color={colors.primaryDark} />
-              <Text style={[styles.zoneText, {color: colors.primaryDark}]}>
-                {user?.zone || 'Zona Centro'}
-              </Text>
-            </View>
-          </View>
-        </View>
-        <TouchableOpacity
-          style={[styles.notifBtn, {backgroundColor: colors.background}]}
-          onPress={() => navigation.navigate('Notifications')}>
-          <Icon name="bell" size={20} color={colors.primary} />
-        </TouchableOpacity>
-      </View>
-
-      {/* Tarjeta Estado del Servicio / ETA (wireframes.md 3.3) */}
-      <View
-        style={[
-          styles.etaCard,
-          {backgroundColor: colors.primary, shadowColor: colors.shadow},
-        ]}>
-        <View style={styles.etaHeader}>
-          <View style={styles.badgeRow}>
-            <Icon name="truck" size={14} color="#FFFFFF" />
-            <Text style={styles.etaBadgeText}>RUTA CENTRO - MAÑANA</Text>
-          </View>
-          <Text style={styles.etaStatusText}>EN CAMINO</Text>
-        </View>
-        <View style={styles.etaDetailsRow}>
-          <View>
-            <Text style={styles.etaLabel}>Tiempo Estimado (ETA)</Text>
-            <Text style={styles.etaValue}>~15 minutos</Text>
-          </View>
-          <View style={styles.etaDivider} />
-          <View>
-            <Text style={styles.etaLabel}>Distancia Faltante</Text>
-            <Text style={styles.etaValue}>450 metros</Text>
-          </View>
-        </View>
-      </View>
-
-      {/* Mapa Interactivo OpenStreetMap (wireframes.md 3.3) */}
-      <View style={[styles.mapCard, {borderColor: colors.border}]}>
+    <View style={styles.container}>
+      {/* 1. MAPA COMPLETO DE FONDO (FULLSCREEN BACKGROUND) */}
+      <View style={StyleSheet.absoluteFill}>
         <MapView
           latitude={20.4536}
           longitude={-97.0876}
@@ -122,129 +71,179 @@ const CitizenHomeScreen: React.FC<{navigation: any}> = ({navigation}) => {
         />
       </View>
 
-      {/* Botones de Acción (wireframes.md 3.3) */}
-      <View style={styles.actionsRow}>
+      {/* 2. ISLA FLOTANTE SUPERIOR: ZONA & BOTÓN NOTIFICACIONES CON CONTADOR */}
+      <View style={styles.topFloatingBar}>
+        <View
+          style={[
+            styles.floatingZoneBadge,
+            {backgroundColor: colors.surface, borderColor: colors.border},
+          ]}>
+          <Icon name="map-pin" size={14} color={colors.primary} />
+          <Text style={[styles.floatingZoneText, {color: colors.text}]}>
+            {user?.zone || 'Gutiérrez Zamora'}
+          </Text>
+        </View>
+
         <TouchableOpacity
-          style={[styles.actionBtn, {backgroundColor: colors.secondary}]}
-          onPress={() => navigation.navigate('Reports')}>
-          <View style={styles.btnRow}>
-            <Icon name="alert" size={18} color="#FFFFFF" />
-            <Text style={styles.actionBtnText}>Reportar Problema</Text>
-          </View>
+          style={[
+            styles.floatingNotifBtn,
+            {backgroundColor: colors.surface, borderColor: colors.border},
+          ]}
+          onPress={() => navigation.navigate('Notifications')}>
+          <Icon name="bell" size={20} color={colors.primary} />
+          {unreadCount > 0 && (
+            <View style={[styles.unreadBadge, {backgroundColor: colors.error}]}>
+              <Text style={styles.unreadBadgeText}>{unreadCount}</Text>
+            </View>
+          )}
         </TouchableOpacity>
       </View>
 
-      {/* Notificaciones Recientes (wireframes.md 3.3) */}
-      {recentNotifs.length > 0 && (
-        <View style={[styles.sectionCard, {backgroundColor: colors.surface, borderColor: colors.border}]}>
-          <View style={styles.sectionHeader}>
-            <View style={styles.btnRow}>
-              <Icon name="bell" size={16} color={colors.primaryDark} />
-              <Text style={[styles.sectionTitle, {color: colors.primaryDark}]}>
-                Notificaciones Recientes
-              </Text>
-            </View>
-            <TouchableOpacity onPress={() => navigation.navigate('Notifications')}>
-              <Text style={[styles.seeAllText, {color: colors.secondary}]}>Ver todas</Text>
-            </TouchableOpacity>
+      {/* 3. ISLA FLOTANTE ETA: TIEMPO ESTIMADO Y DISTANCIA */}
+      <View style={[styles.floatingEtaCard, {backgroundColor: colors.primary}]}>
+        <View style={styles.etaHeader}>
+          <View style={styles.badgeRow}>
+            <Icon name="truck" size={14} color="#FFFFFF" />
+            <Text style={styles.etaBadgeText}>RUTA CENTRO - G. ZAMORA</Text>
           </View>
-          {recentNotifs.map(item => (
-            <View key={item.id} style={styles.notifItem}>
-              <View style={styles.iconWrapper}>
-                <Icon
-                  name={
-                    item.type === 'proximity'
-                      ? 'map-pin'
-                      : item.type === 'time_estimate'
-                      ? 'clock'
-                      : 'lightbulb'
-                  }
-                  size={18}
-                  color={colors.primary}
-                />
-              </View>
-              <View style={styles.notifTextContainer}>
-                <Text style={[styles.notifTitle, {color: colors.text}]}>{item.title}</Text>
-                <Text style={[styles.notifMsg, {color: colors.textSecondary}]}>{item.message}</Text>
-              </View>
-            </View>
-          ))}
+          <Text style={styles.etaStatusText}>EN CAMINO</Text>
         </View>
-      )}
-
-      {/* Consejos (HU-C05) */}
-      {tips.length > 0 && (
-        <TouchableOpacity
-          style={[
-            styles.tipCard,
-            {backgroundColor: colors.surface, borderColor: colors.border},
-          ]}
-          onPress={nextTip}>
-          <View style={styles.tipIconWrapper}>
-            <Icon name="lightbulb" size={24} color={colors.primary} />
+        <View style={styles.etaDetailsRow}>
+          <View>
+            <Text style={styles.etaLabel}>Tiempo Estimado (ETA)</Text>
+            <Text style={styles.etaValue}>~15 minutos</Text>
           </View>
-          <View style={styles.tipBody}>
-            <Text style={[styles.tipTitle, {color: colors.primary}]}>
-              Consejo de Recolección #{currentTipIndex + 1}
-            </Text>
-            <Text style={[styles.tipText, {color: colors.text}]}>
+          <View style={styles.etaDivider} />
+          <View>
+            <Text style={styles.etaLabel}>Distancia Faltante</Text>
+            <Text style={styles.etaValue}>450 metros</Text>
+          </View>
+        </View>
+      </View>
+
+      {/* 4. ISLAS FLOTANTES INFERIORES: TIP DE RECOLECCIÓN Y BOTÓN REPORTAR */}
+      <View style={styles.bottomFloatingContainer}>
+        {tips.length > 0 && (
+          <TouchableOpacity
+            style={[
+              styles.floatingTipCard,
+              {backgroundColor: colors.surface, borderColor: colors.border},
+            ]}
+            onPress={nextTip}>
+            <Icon name="lightbulb" size={18} color={colors.primary} />
+            <Text style={[styles.floatingTipText, {color: colors.text}]} numberOfLines={1}>
               {tips[currentTipIndex]?.message}
             </Text>
+            <Icon name="chevron-right" size={16} color={colors.textSecondary} />
+          </TouchableOpacity>
+        )}
+
+        <TouchableOpacity
+          style={[styles.floatingReportBtn, {backgroundColor: colors.secondary}]}
+          onPress={() => navigation.navigate('Reports')}>
+          <View style={styles.btnRow}>
+            <Icon name="alert" size={18} color="#FFFFFF" />
+            <Text style={styles.floatingReportBtnText}>Reportar Problema</Text>
           </View>
-          <Icon name="chevron-right" size={18} color={colors.textSecondary} />
         </TouchableOpacity>
-      )}
-    </ScrollView>
+      </View>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {flex: 1},
-  content: {padding: Spacing.md},
-  topBar: {
+  container: {
+    flex: 1,
+    position: 'relative',
+  },
+  topFloatingBar: {
+    position: 'absolute',
+    top: Spacing.md,
+    left: Spacing.md,
+    right: Spacing.md,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    padding: Spacing.md,
-    borderRadius: BorderRadius.md,
+    zIndex: 10,
+  },
+  floatingZoneBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    paddingHorizontal: Spacing.md,
+    paddingVertical: 8,
+    borderRadius: BorderRadius.full,
     borderWidth: 1,
-    marginBottom: Spacing.md,
+    elevation: 4,
+    shadowColor: '#000000',
+    shadowOffset: {width: 0, height: 2},
+    shadowOpacity: 0.15,
+    shadowRadius: 4,
   },
-  userInfo: {flex: 1},
-  greeting: {fontSize: Typography.sizes.md, fontWeight: 'bold'},
-  badgeRow: {flexDirection: 'row', alignItems: 'center', gap: 4},
-  btnRow: {flexDirection: 'row', alignItems: 'center', gap: 6},
-  iconWrapper: {marginRight: Spacing.sm, width: 28, alignItems: 'center'},
-  tipIconWrapper: {marginRight: Spacing.sm, width: 32, alignItems: 'center'},
-  zoneBadge: {
-    alignSelf: 'flex-start',
-    paddingHorizontal: Spacing.xs,
-    paddingVertical: 2,
-    borderRadius: BorderRadius.sm,
-    marginTop: 4,
+  floatingZoneText: {
+    fontSize: Typography.sizes.xs,
+    fontWeight: 'bold',
   },
-  zoneText: {fontSize: Typography.sizes.xs, fontWeight: 'bold'},
-  notifBtn: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
+  floatingNotifBtn: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
     justifyContent: 'center',
     alignItems: 'center',
+    borderWidth: 1,
+    elevation: 4,
+    shadowColor: '#000000',
+    shadowOffset: {width: 0, height: 2},
+    shadowOpacity: 0.15,
+    shadowRadius: 4,
+    position: 'relative',
   },
-  notifBtnText: {fontSize: 20},
-  etaCard: {
+  unreadBadge: {
+    position: 'absolute',
+    top: -2,
+    right: -2,
+    minWidth: 18,
+    height: 18,
+    borderRadius: 9,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 4,
+  },
+  unreadBadgeText: {
+    color: '#FFFFFF',
+    fontSize: 10,
+    fontWeight: 'bold',
+  },
+  floatingEtaCard: {
+    position: 'absolute',
+    top: 66,
+    left: Spacing.md,
+    right: Spacing.md,
     padding: Spacing.md,
     borderRadius: BorderRadius.lg,
-    marginBottom: Spacing.md,
-    elevation: 3,
+    elevation: 6,
+    shadowColor: '#000000',
+    shadowOffset: {width: 0, height: 3},
+    shadowOpacity: 0.2,
+    shadowRadius: 6,
+    zIndex: 10,
   },
   etaHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: Spacing.sm,
+    marginBottom: Spacing.xs,
   },
-  etaBadgeText: {color: '#FFFFFF', fontSize: Typography.sizes.xs, fontWeight: 'bold'},
+  badgeRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+  },
+  etaBadgeText: {
+    color: '#FFFFFF',
+    fontSize: Typography.sizes.xs,
+    fontWeight: 'bold',
+  },
   etaStatusText: {
     backgroundColor: 'rgba(255,255,255,0.2)',
     color: '#FFFFFF',
@@ -260,64 +259,67 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingTop: Spacing.xs,
   },
-  etaLabel: {color: 'rgba(255,255,255,0.8)', fontSize: Typography.sizes.xs},
-  etaValue: {color: '#FFFFFF', fontSize: Typography.sizes.lg, fontWeight: 'bold', marginTop: 2},
-  etaDivider: {width: 1, height: 30, backgroundColor: 'rgba(255,255,255,0.3)'},
-  mapCard: {
-    height: 280,
-    borderRadius: BorderRadius.lg,
-    borderWidth: 1,
-    marginBottom: Spacing.md,
-    overflow: 'hidden',
+  etaLabel: {
+    color: 'rgba(255,255,255,0.8)',
+    fontSize: Typography.sizes.xs,
   },
-  actionsRow: {
+  etaValue: {
+    color: '#FFFFFF',
+    fontSize: Typography.sizes.md,
+    fontWeight: 'bold',
+    marginTop: 2,
+  },
+  etaDivider: {
+    width: 1,
+    height: 28,
+    backgroundColor: 'rgba(255,255,255,0.3)',
+  },
+  bottomFloatingContainer: {
+    position: 'absolute',
+    bottom: Spacing.md,
+    left: Spacing.md,
+    right: Spacing.md,
+    gap: Spacing.sm,
+    zIndex: 10,
+  },
+  floatingTipCard: {
     flexDirection: 'row',
-    marginBottom: Spacing.md,
-  },
-  actionBtn: {
-    flex: 1,
-    padding: Spacing.md,
+    alignItems: 'center',
+    gap: Spacing.xs,
+    paddingHorizontal: Spacing.md,
+    paddingVertical: Spacing.sm,
     borderRadius: BorderRadius.md,
-    alignItems: 'center',
+    borderWidth: 1,
+    elevation: 4,
+    shadowColor: '#000000',
+    shadowOffset: {width: 0, height: 2},
+    shadowOpacity: 0.15,
+    shadowRadius: 4,
   },
-  actionBtnText: {color: '#FFFFFF', fontSize: Typography.sizes.sm, fontWeight: 'bold'},
-  sectionCard: {
+  floatingTipText: {
+    flex: 1,
+    fontSize: Typography.sizes.xs,
+  },
+  floatingReportBtn: {
     padding: Spacing.md,
     borderRadius: BorderRadius.lg,
-    borderWidth: 1,
-    marginBottom: Spacing.md,
-  },
-  sectionHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: Spacing.sm,
+    elevation: 6,
+    shadowColor: '#000000',
+    shadowOffset: {width: 0, height: 3},
+    shadowOpacity: 0.2,
+    shadowRadius: 6,
   },
-  sectionTitle: {fontSize: Typography.sizes.sm, fontWeight: 'bold'},
-  seeAllText: {fontSize: Typography.sizes.xs, fontWeight: 'bold'},
-  notifItem: {
+  btnRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingVertical: Spacing.xs,
-    borderTopWidth: StyleSheet.hairlineWidth,
-    borderTopColor: '#CCCCCC33',
+    gap: 8,
   },
-  notifIcon: {fontSize: 20, marginRight: Spacing.sm},
-  notifTextContainer: {flex: 1},
-  notifTitle: {fontSize: Typography.sizes.xs, fontWeight: 'bold'},
-  notifMsg: {fontSize: Typography.sizes.xs},
-  tipCard: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: Spacing.md,
-    borderRadius: BorderRadius.lg,
-    borderWidth: 1,
+  floatingReportBtnText: {
+    color: '#FFFFFF',
+    fontSize: Typography.sizes.md,
+    fontWeight: 'bold',
   },
-  tipIcon: {fontSize: 28, marginRight: Spacing.sm},
-  tipBody: {flex: 1},
-  tipTitle: {fontSize: Typography.sizes.xs, fontWeight: 'bold', marginBottom: 2},
-  tipText: {fontSize: Typography.sizes.sm},
-  tipNext: {fontSize: Typography.sizes.xs, marginLeft: Spacing.xs},
 });
 
 export default CitizenHomeScreen;
