@@ -3,44 +3,46 @@
 
 export const Colors = {
   light: {
-    primary: '#2ECC71',        // verde ecológico principal
-    primaryDark: '#27AE60',
-    primaryLight: '#A9DFBF',
-    secondary: '#3498DB',      // azul para acciones secundarias
-    secondaryDark: '#2980B9',
-    background: '#F8F9FA',
-    surface: '#FFFFFF',
+    primary: '#2E7D32',        // Verde institucional
+    primaryDark: '#1F4D3A',    // Verde profundo / bosque
+    primaryLight: '#C8E6C9',
+    secondary: '#1F5F8C',      // Azul confianza
+    secondaryDark: '#133D5B',
+    background: '#F7F3E8',     // Crema cálida
+    surface: '#FFFFFF',        // Blanco limpio
     surfaceElevated: '#FFFFFF',
-    text: '#1A1A2E',
-    textSecondary: '#6C757D',
+    text: '#263238',           // Gris grafito
+    textSecondary: '#6B7280',  // Gris suave
     textOnPrimary: '#FFFFFF',
-    border: '#E9ECEF',
-    error: '#E74C3C',
-    warning: '#F39C12',
-    success: '#2ECC71',
-    info: '#3498DB',
-    shadow: 'rgba(0, 0, 0, 0.1)',
-    mapOverlay: 'rgba(255, 255, 255, 0.9)',
+    border: '#E2E8F0',
+    error: '#D64545',          // Rojo alerta
+    warning: '#F4B942',        // Ámbar cálido
+    success: '#4CAF50',        // Verde éxito
+    info: '#1F5F8C',           // Azul confianza
+    orange: '#E67E22',         // Naranja servicio
+    shadow: 'rgba(38, 50, 56, 0.1)',
+    mapOverlay: 'rgba(255, 255, 255, 0.95)',
   },
   dark: {
-    primary: '#2ECC71',
-    primaryDark: '#27AE60',
-    primaryLight: '#1B4332',
-    secondary: '#3498DB',
-    secondaryDark: '#2980B9',
-    background: '#0D1117',
-    surface: '#161B22',
-    surfaceElevated: '#21262D',
-    text: '#F0F6FC',
-    textSecondary: '#8B949E',
+    primary: '#4CAF50',
+    primaryDark: '#2E7D32',
+    primaryLight: '#1F4D3A',
+    secondary: '#4A90E2',
+    secondaryDark: '#1F5F8C',
+    background: '#12181B',
+    surface: '#1E262B',
+    surfaceElevated: '#263238',
+    text: '#F7F3E8',
+    textSecondary: '#94A3B8',
     textOnPrimary: '#FFFFFF',
-    border: '#30363D',
-    error: '#F85149',
-    warning: '#D29922',
-    success: '#3FB950',
-    info: '#58A6FF',
+    border: '#334155',
+    error: '#EF5350',
+    warning: '#FFCA28',
+    success: '#66BB6A',
+    info: '#42A5F5',
+    orange: '#FFA726',
     shadow: 'rgba(0, 0, 0, 0.4)',
-    mapOverlay: 'rgba(13, 17, 23, 0.9)',
+    mapOverlay: 'rgba(30, 38, 43, 0.95)',
   },
 };
 

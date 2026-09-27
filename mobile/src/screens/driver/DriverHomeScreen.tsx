@@ -1,4 +1,4 @@
-// Home Conductor - Vista principal operador con Ruta Asignada y Control de Recorrido (HU-D01)
+// Home Conductor - Mapa Interactivo OpenStreetMap con Ruta Asignada y Recorrido (HU-D01, views.md 4.4, design-system.md)
 import React, {useEffect, useState} from 'react';
 import {
   View,
@@ -9,6 +9,7 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import {useTheme} from '../../context/ThemeContext';
+import MapView from '../../components/MapView';
 import {TruckService} from '../../services';
 import {Route} from '../../services/types';
 import {Typography, Spacing} from '../../theme';
@@ -33,32 +34,58 @@ const DriverHomeScreen: React.FC<{navigation: any}> = ({navigation}) => {
   }, []);
 
   const toggleShift = () => {
-    if (shiftStatus === 'active') {
-      setShiftStatus('pending');
-    } else {
-      setShiftStatus('active');
-    }
+    setShiftStatus((prev) => (prev === 'active' ? 'pending' : 'active'));
   };
 
   return (
     <ScrollView
       style={[styles.container, {backgroundColor: colors.background}]}
       contentContainerStyle={styles.content}>
-      {/* Mapa simulado de la ruta asignada */}
-      <View style={[styles.mapContainer, {backgroundColor: colors.surface, borderColor: colors.border}]}>
-        <Text style={[styles.mapIcon]}>🗺️</Text>
-        <Text style={[styles.mapTitle, {color: colors.text}]}>
-          {route ? route.name : 'Ruta Centro - Mañana'}
-        </Text>
-        <Text style={[styles.mapSub, {color: colors.textSecondary}]}>
-          {route ? `${route.points.length} puntos de recolección • ~${route.estimatedDuration} min` : 'Cargando datos...'}
-        </Text>
-
-        <View style={styles.mapStatusBadge}>
-          <Text style={[styles.statusBadgeText, {color: shiftStatus === 'active' ? colors.success : colors.warning}]}>
-            ● {shiftStatus === 'active' ? 'EN RECORRIDO' : 'PAUSADO'}
+      {/* Header Info de Ruta Asignada */}
+      <View style={[styles.headerCard, {backgroundColor: colors.surface, borderColor: colors.border}]}>
+        <View style={styles.headerTitleRow}>
+          <Text style={[styles.routeName, {color: colors.primaryDark}]}>
+            {route ? route.name : 'Ruta Centro - Mañana'}
           </Text>
+          <View
+            style={[
+              styles.statusBadge,
+              {
+                backgroundColor:
+                  shiftStatus === 'active' ? colors.success + '20' : colors.warning + '20',
+              },
+            ]}>
+            <Text
+              style={[
+                styles.statusBadgeText,
+                {color: shiftStatus === 'active' ? colors.success : colors.warning},
+              ]}>
+              ● {shiftStatus === 'active' ? 'RECORRIDO ACTIVO' : 'PAUSADO'}
+            </Text>
+          </View>
         </View>
+        <Text style={[styles.routeMeta, {color: colors.textSecondary}]}>
+          Zona: {route ? route.zone : 'Zona Centro'} • {route ? route.points.length : 6} puntos de recolección
+        </Text>
+      </View>
+
+      {/* Mapa Interactivo con OpenStreetMap */}
+      <View style={[styles.mapContainer, {borderColor: colors.border}]}>
+        <MapView
+          latitude={20.6625}
+          longitude={-103.3475}
+          truckLatitude={20.6610}
+          truckLongitude={-103.3490}
+          truckName="Mi Camión (ECO-TRUCK-001)"
+          routePoints={route ? route.points : [
+            {latitude: 20.6600, longitude: -103.3500, order: 1, label: 'Inicio'},
+            {latitude: 20.6610, longitude: -103.3490, order: 2, label: 'Calle Morelos'},
+            {latitude: 20.6625, longitude: -103.3475, order: 3, label: 'Av. Juárez'},
+            {latitude: 20.6640, longitude: -103.3460, order: 4, label: 'Plaza Central'},
+            {latitude: 20.6655, longitude: -103.3445, order: 5, label: 'Col. San Marcos'},
+            {latitude: 20.6670, longitude: -103.3430, order: 6, label: 'Final'},
+          ]}
+        />
       </View>
 
       {/* Controles de la Ruta */}
@@ -79,14 +106,14 @@ const DriverHomeScreen: React.FC<{navigation: any}> = ({navigation}) => {
 
         <TouchableOpacity
           style={[styles.actionButton, {backgroundColor: colors.error}]}
-          onPress={() => navigation.navigate('Alerts')}>
+          onPress={() => navigation.navigate('AlertsTab', {screen: 'ReportIncident'})}>
           <Text style={styles.actionText}>🚨 Reportar Percance</Text>
         </TouchableOpacity>
       </View>
 
       {/* Puntos de Recolección (HU-D01) */}
       <View style={[styles.section, {backgroundColor: colors.surface, borderColor: colors.border}]}>
-        <Text style={[styles.sectionTitle, {color: colors.text}]}>
+        <Text style={[styles.sectionTitle, {color: colors.primaryDark}]}>
           📍 Puntos de Recolección Asignados
         </Text>
 
@@ -120,28 +147,41 @@ const DriverHomeScreen: React.FC<{navigation: any}> = ({navigation}) => {
 const styles = StyleSheet.create({
   container: {flex: 1},
   content: {padding: Spacing.md},
-  mapContainer: {
-    height: 180,
+  headerCard: {
+    padding: Spacing.md,
     borderRadius: 16,
     borderWidth: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
     marginBottom: Spacing.md,
-    position: 'relative',
   },
-  mapIcon: {fontSize: 36, marginBottom: Spacing.xs},
-  mapTitle: {fontSize: Typography.sizes.lg, fontWeight: 'bold'},
-  mapSub: {fontSize: Typography.sizes.xs, marginTop: 2},
-  mapStatusBadge: {
-    position: 'absolute',
-    top: Spacing.sm,
-    right: Spacing.sm,
-    backgroundColor: 'rgba(0,0,0,0.6)',
-    paddingHorizontal: Spacing.sm,
-    paddingVertical: 4,
-    borderRadius: 12,
+  headerTitleRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 4,
   },
-  statusBadgeText: {fontSize: Typography.sizes.xs, fontWeight: 'bold'},
+  routeName: {
+    fontSize: Typography.sizes.lg,
+    fontWeight: 'bold',
+  },
+  statusBadge: {
+    paddingHorizontal: Spacing.xs,
+    paddingVertical: 2,
+    borderRadius: 8,
+  },
+  statusBadgeText: {
+    fontSize: Typography.sizes.xs,
+    fontWeight: 'bold',
+  },
+  routeMeta: {
+    fontSize: Typography.sizes.xs,
+  },
+  mapContainer: {
+    height: 280,
+    borderRadius: 16,
+    borderWidth: 1,
+    marginBottom: Spacing.md,
+    overflow: 'hidden',
+  },
   controlsRow: {
     flexDirection: 'row',
     gap: Spacing.sm,

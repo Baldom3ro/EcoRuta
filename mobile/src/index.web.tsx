@@ -7,6 +7,6 @@ const rootTag = document.getElementById('root');
 if (rootTag) {
   AppRegistry.runApplication('EcoRuta', {
     initialProps: {},
-    rootTag,
+    rootTag: rootTag as any,
   });
 }

@@ -330,3 +330,10 @@ EcoRuta/
 - Integrado React Native Web y Vite para visualizar la app instantáneamente en el navegador web
 - Configurado index.html, index.web.tsx y vite.config.ts con shims web
 - Añadido script `npm run web` en package.json para probar sin emulador Android super ligero
+
+### Commit 5 — Mapa interactivo OpenStreetMap + Alineación con design-system.md y views.md
+- Creado componente `MapView` con Leaflet JS y tiles de OpenStreetMap (sin llaves de Google)
+- Integrados marcadores en tiempo real para camión recolector (🚛), puntos de recolección (📍) y línea de ruta
+- Actualizado `theme/index.ts` con la paleta de colores exacta de `design-system.md` (#2E7D32, #1F4D3A, #1F5F8C, #F7F3E8)
+- Actualizado `CitizenHomeScreen` y `DriverHomeScreen` reemplazando placeholders por mapas interactivos reales de OpenStreetMap
+- Pruebas unitarias pasando correctamente
