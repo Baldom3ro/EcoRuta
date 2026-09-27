@@ -393,3 +393,9 @@ EcoRuta/
 ### Commit 15 — Cierre Automático de Lista al Tocar Fuera del Desplegable
 - Añadida capa backdrop invisible `backdropOverlay` detrás del contenedor de puntos para colapsar la lista inline al presionar cualquier parte del mapa fuera de la tarjeta
 - Validado paso limpio de `npx tsc --noEmit` y `npm run lint` (0 errores, 0 advertencias)
+
+### Commit 16 — Sincronización Automática de Reportes y Modal de Detalle Completo
+- Añadido `useFocusEffect` en `AlertsScreen.tsx` y `MyReportsScreen.tsx` para recargar reportes automáticamente al crear una incidencia
+- Añadido modal desplegable de detalle de reporte para conductor y ciudadano mostrando tipo, usuario, dirección, coordenadas GPS, fecha/hora, descripción completa y foto adjunta
+- Implementada función `updateReportStatus` en `reportService.mock.ts` permitiendo al conductor cambiar el estado del reporte ("En Revisión", "Resolver")
+- Validado paso limpio de `npx tsc --noEmit` y `npm run lint` (0 errores, 0 advertencias)

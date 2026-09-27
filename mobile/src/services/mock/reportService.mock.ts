@@ -54,3 +54,16 @@ export const createReport = async (
   mockReports.push(newReport);
   return newReport;
 };
+
+export const updateReportStatus = async (
+  reportId: string,
+  status: 'pending' | 'in_review' | 'resolved',
+): Promise<Report | null> => {
+  await new Promise<void>(resolve => setTimeout(resolve, 300));
+  const report = mockReports.find(r => r.id === reportId);
+  if (report) {
+    report.status = status;
+    return {...report};
+  }
+  return null;
+};
