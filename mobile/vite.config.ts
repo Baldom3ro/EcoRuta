@@ -15,6 +15,10 @@ export default defineConfig({
         replacement: path.resolve(__dirname, 'src/shims/react-native-safe-area-context.web.js'),
       },
       {
+        find: 'react-native-svg',
+        replacement: path.resolve(__dirname, 'src/shims/react-native-svg.web.tsx'),
+      },
+      {
         find: 'react-native-screens',
         replacement: path.resolve(__dirname, 'src/shims/react-native-screens.web.js'),
       },

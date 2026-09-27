@@ -354,3 +354,8 @@ EcoRuta/
 - Reemplazados todos los emojis por íconos SVG estilizados en las pantallas y tabs de ciudadano (`CitizenHomeScreen`, `CreateReportScreen`, `NotificationsScreen`, `MyReportsScreen`, `SettingsScreen`, `CitizenTabs`)
 - Reemplazados emojis por íconos SVG estilizados en las pantallas y tabs de conductor (`DriverHomeScreen`, `AlertsScreen`, `ReportIncidentScreen`, `HistoryScreen`, `DriverSettingsScreen`, `DriverTabs`)
 - Validado paso limpio de `npx tsc --noEmit` y `npm run lint` (0 errores, 0 advertencias)
+
+### Commit 9 — Shim de react-native-svg para soporte web impecable en Vite
+- Creado shim `src/shims/react-native-svg.web.tsx` mapeado en `vite.config.ts` para resolver incompatibilidades de `react-native-svg` con `react-native-web`
+- Resuelto error `[MISSING_EXPORT] "default" is not exported by "node_modules/react-native-web/dist/index.js"` al ejecutar `npm run web`
+- Validado paso limpio de `npx tsc --noEmit` y `npm run lint` (0 errores, 0 advertencias)
