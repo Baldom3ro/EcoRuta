@@ -376,3 +376,10 @@ EcoRuta/
 - Eliminada restricción `numberOfLines={1}` de `floatingTipText` en `CitizenHomeScreen.tsx`
 - Ajustado padding y flexibilidad de `floatingTipCard` para permitir lectura completa de tips y recomendaciones ecológicas en múltiples líneas sin truncarse con "..."
 - Validado paso limpio de `npx tsc --noEmit` y `npm run lint` (0 errores, 0 advertencias)
+
+### Commit 13 — Rediseño GIS en Home Conductor con Mapa Fullscreen y Desplegable de Puntos
+- Rediseñada la pantalla `DriverHomeScreen.tsx` con mapa a pantalla completa como fondo principal (`StyleSheet.absoluteFill`) e islas flotantes
+- Reemplazada la lista fija por una tarjeta flotante interactiva que muestra únicamente el siguiente punto pendiente de recolección
+- Añadido modal desplegable con animación slide que muestra la lista completa de puntos de recolección (tanto los visitados como los pendientes)
+- Añadido icono SVG `x` en `src/components/Icon.tsx` para cierre de modales
+- Validado paso limpio de `npx tsc --noEmit` y `npm run lint` (0 errores, 0 advertencias)
