@@ -36,7 +36,7 @@ const BackHeaderButton: React.FC<{navigation: any; color: string}> = ({
       if (navigation.canGoBack()) {
         navigation.goBack();
       } else {
-        navigation.navigate('DriverHome');
+        navigation.navigate('AlertsTab', {screen: 'AlertsList'});
       }
     }}>
     <Icon name="arrow-left" size={22} color={color} />
@@ -47,11 +47,18 @@ const renderReportHeaderLeft = (stackNav: any, primaryColor: string) => {
   return <BackHeaderButton navigation={stackNav} color={primaryColor} />;
 };
 
+const renderAlertsTabListener = ({navigation}: {navigation: any}) => ({
+  tabPress: () => {
+    navigation.navigate('AlertsTab', {screen: 'AlertsList'});
+  },
+});
+
 const AlertsStack: React.FC = () => {
   const {colors} = useTheme();
 
   return (
     <Stack.Navigator
+      initialRouteName="AlertsList"
       screenOptions={{
         headerStyle: {backgroundColor: colors.surface},
         headerTintColor: colors.text,
@@ -96,6 +103,7 @@ const DriverTabs: React.FC = () => {
       <Tab.Screen
         name="AlertsTab"
         component={AlertsStack}
+        listeners={renderAlertsTabListener}
         options={{
           headerShown: false,
           title: 'Alertas',

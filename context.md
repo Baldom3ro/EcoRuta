@@ -405,3 +405,9 @@ EcoRuta/
 - Añadidos íconos SVG `chevron-left` y `arrow-left` en `src/components/Icon.tsx`
 - Actualizada la lógica de retorno en `ReportIncidentScreen.tsx` para usar fallback seguro `navigation.navigate('DriverHome')` si no hay stack previo
 - Validado paso limpio de `npx tsc --noEmit` y `npm run lint` (0 errores, 0 advertencias)
+
+### Commit 18 — Corrección de Flujo de Navegación entre Mapa, Reporte y Alertas
+- Añadido `initial: false` al navegar a `ReportIncident` desde `DriverHomeScreen` para conservar `AlertsList` en la base de la pila de navegación
+- Añadido listener `tabPress` en `DriverTabs.tsx` para forzar la navegación directa a `AlertsList` cada vez que el conductor presiona la pestaña de "Alertas"
+- Actualizada la ruta por defecto de regreso a `AlertsList` en lugar del mapa cuando finaliza o retrocede un reporte de incidente
+- Validado paso limpio de `npx tsc --noEmit` y `npm run lint` (0 errores, 0 advertencias)

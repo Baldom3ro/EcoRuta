@@ -65,7 +65,7 @@ const ReportIncidentScreen: React.FC<{navigation: any}> = ({navigation}) => {
               if (navigation.canGoBack()) {
                 navigation.goBack();
               } else {
-                navigation.navigate('DriverHome');
+                navigation.navigate('AlertsTab', {screen: 'AlertsList'});
               }
             },
           },

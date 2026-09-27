@@ -262,7 +262,12 @@ const DriverHomeScreen: React.FC<{navigation: any}> = ({navigation}) => {
 
           <TouchableOpacity
             style={[styles.actionButton, {backgroundColor: colors.error}]}
-            onPress={() => navigation.navigate('AlertsTab', {screen: 'ReportIncident'})}>
+            onPress={() =>
+              navigation.navigate('AlertsTab', {
+                screen: 'ReportIncident',
+                initial: false,
+              })
+            }>
             <View style={styles.btnRow}>
               <Icon name="alert" size={18} color="#FFFFFF" />
               <Text style={styles.actionText}>Reportar Percance</Text>
