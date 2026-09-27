@@ -411,3 +411,23 @@ EcoRuta/
 - Añadido listener `tabPress` en `DriverTabs.tsx` para forzar la navegación directa a `AlertsList` cada vez que el conductor presiona la pestaña de "Alertas"
 - Actualizada la ruta por defecto de regreso a `AlertsList` en lugar del mapa cuando finaliza o retrocede un reporte de incidente
 - Validado paso limpio de `npx tsc --noEmit` y `npm run lint` (0 errores, 0 advertencias)
+
+---
+
+## Estado Actual y Pendientes (Lo que hace falta)
+
+### Funcionalidades Completadas (100% Funcional en Mock)
+- **Modo Web & Nativo:** Ejecución fluida en navegador web (`npm run web`) y estructura nativa React Native CLI + TypeScript.
+- **Mapas OpenStreetMap GIS:** Fondo a pantalla completa (`StyleSheet.absoluteFill`) con islas UI flotantes para Ciudadano y Conductor en Gutiérrez Zamora, Veracruz.
+- **Rastreo y Modales Inline:** Camión recolector en tiempo real sin reiniciar zoom del mapa; acordeón inline para puntos de recolección con cierre por toque externo.
+- **Sistema de Reportes y Alertas:** Creación de incidencias con foto opcional, mapa de ubicación, actualización de estado por conductor ("En Revisión", "Resuelto") y sincronización en tiempo real vía `useFocusEffect`.
+- **Navegación Flamante:** Botones de retroceso dedicados y listeners en tabs para evitar bloqueos de flujo entre alertas y reportes de percances.
+- **Design System & Íconos SVG:** Paleta oficial EcoRuta, soporte claro/oscuro y catálogo completo de íconos vectoriales SVG.
+- **Calidad de Código:** 0 errores de TypeScript (`tsc --noEmit`), 0 advertencias de ESLint (`npm run lint`), CI con GitHub Actions.
+
+### Pendientes para Fase Siguiente (Lo que hace falta)
+1. **Backend API Real EcoRuta:** Reemplazar servicios simulados (`services/mock/`) por peticiones HTTP/REST reales (`services/api/`) al conectar con la base de datos del sistema web.
+2. **Push Notifications Nativas:** Configuración de Firebase Cloud Messaging (FCM) / APNs para alertas de proximidad y suspensión de rutas con la app cerrada.
+3. **Autenticación Social Real:** Integrar SDKs oficiales de Google Sign-In y Facebook Login.
+4. **GPS Físico del Conductor:** Transmisión de coordenadas reales del chip GPS del dispositivo móvil del operador usando `react-native-geolocation-service`.
+5. **Compilación e Instalación Nativa:** Generación de paquete APK para Android y compilación Xcode para iOS en Mac.
