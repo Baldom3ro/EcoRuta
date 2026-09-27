@@ -10,6 +10,7 @@ import {
 import {useTheme} from '../../context/ThemeContext';
 import {useAuth} from '../../context/AuthContext';
 import MapView from '../../components/MapView';
+import {Icon} from '../../components/Icon';
 import {TruckService, NotificationService} from '../../services';
 import {TruckLocation, Tip, Notification} from '../../services/types';
 import {Typography, Spacing, BorderRadius} from '../../theme';
@@ -62,15 +63,18 @@ const CitizenHomeScreen: React.FC<{navigation: any}> = ({navigation}) => {
             Hola, {user?.name || 'María García'}
           </Text>
           <View style={[styles.zoneBadge, {backgroundColor: colors.primaryLight + '40'}]}>
-            <Text style={[styles.zoneText, {color: colors.primaryDark}]}>
-              📍 {user?.zone || 'Zona Centro'}
-            </Text>
+            <View style={styles.badgeRow}>
+              <Icon name="map-pin" size={12} color={colors.primaryDark} />
+              <Text style={[styles.zoneText, {color: colors.primaryDark}]}>
+                {user?.zone || 'Zona Centro'}
+              </Text>
+            </View>
           </View>
         </View>
         <TouchableOpacity
           style={[styles.notifBtn, {backgroundColor: colors.background}]}
           onPress={() => navigation.navigate('Notifications')}>
-          <Text style={styles.notifBtnText}>🔔</Text>
+          <Icon name="bell" size={20} color={colors.primary} />
         </TouchableOpacity>
       </View>
 
@@ -81,7 +85,10 @@ const CitizenHomeScreen: React.FC<{navigation: any}> = ({navigation}) => {
           {backgroundColor: colors.primary, shadowColor: colors.shadow},
         ]}>
         <View style={styles.etaHeader}>
-          <Text style={styles.etaBadgeText}>● RUTA CENTRO - MAÑANA</Text>
+          <View style={styles.badgeRow}>
+            <Icon name="truck" size={14} color="#FFFFFF" />
+            <Text style={styles.etaBadgeText}>RUTA CENTRO - MAÑANA</Text>
+          </View>
           <Text style={styles.etaStatusText}>EN CAMINO</Text>
         </View>
         <View style={styles.etaDetailsRow}>
@@ -120,7 +127,10 @@ const CitizenHomeScreen: React.FC<{navigation: any}> = ({navigation}) => {
         <TouchableOpacity
           style={[styles.actionBtn, {backgroundColor: colors.secondary}]}
           onPress={() => navigation.navigate('Reports')}>
-          <Text style={styles.actionBtnText}>🚨 Reportar Problema</Text>
+          <View style={styles.btnRow}>
+            <Icon name="alert" size={18} color="#FFFFFF" />
+            <Text style={styles.actionBtnText}>Reportar Problema</Text>
+          </View>
         </TouchableOpacity>
       </View>
 
@@ -128,18 +138,31 @@ const CitizenHomeScreen: React.FC<{navigation: any}> = ({navigation}) => {
       {recentNotifs.length > 0 && (
         <View style={[styles.sectionCard, {backgroundColor: colors.surface, borderColor: colors.border}]}>
           <View style={styles.sectionHeader}>
-            <Text style={[styles.sectionTitle, {color: colors.primaryDark}]}>
-              🔔 Notificaciones Recientes
-            </Text>
+            <View style={styles.btnRow}>
+              <Icon name="bell" size={16} color={colors.primaryDark} />
+              <Text style={[styles.sectionTitle, {color: colors.primaryDark}]}>
+                Notificaciones Recientes
+              </Text>
+            </View>
             <TouchableOpacity onPress={() => navigation.navigate('Notifications')}>
               <Text style={[styles.seeAllText, {color: colors.secondary}]}>Ver todas</Text>
             </TouchableOpacity>
           </View>
           {recentNotifs.map(item => (
             <View key={item.id} style={styles.notifItem}>
-              <Text style={styles.notifIcon}>
-                {item.type === 'proximity' ? '📍' : item.type === 'time_estimate' ? '⏰' : '💡'}
-              </Text>
+              <View style={styles.iconWrapper}>
+                <Icon
+                  name={
+                    item.type === 'proximity'
+                      ? 'map-pin'
+                      : item.type === 'time_estimate'
+                      ? 'clock'
+                      : 'lightbulb'
+                  }
+                  size={18}
+                  color={colors.primary}
+                />
+              </View>
               <View style={styles.notifTextContainer}>
                 <Text style={[styles.notifTitle, {color: colors.text}]}>{item.title}</Text>
                 <Text style={[styles.notifMsg, {color: colors.textSecondary}]}>{item.message}</Text>
@@ -157,7 +180,9 @@ const CitizenHomeScreen: React.FC<{navigation: any}> = ({navigation}) => {
             {backgroundColor: colors.surface, borderColor: colors.border},
           ]}
           onPress={nextTip}>
-          <Text style={styles.tipIcon}>{tips[currentTipIndex]?.icon || '💡'}</Text>
+          <View style={styles.tipIconWrapper}>
+            <Icon name="lightbulb" size={24} color={colors.primary} />
+          </View>
           <View style={styles.tipBody}>
             <Text style={[styles.tipTitle, {color: colors.primary}]}>
               Consejo de Recolección #{currentTipIndex + 1}
@@ -166,7 +191,7 @@ const CitizenHomeScreen: React.FC<{navigation: any}> = ({navigation}) => {
               {tips[currentTipIndex]?.message}
             </Text>
           </View>
-          <Text style={[styles.tipNext, {color: colors.textSecondary}]}>▶</Text>
+          <Icon name="chevron-right" size={18} color={colors.textSecondary} />
         </TouchableOpacity>
       )}
     </ScrollView>
@@ -187,6 +212,10 @@ const styles = StyleSheet.create({
   },
   userInfo: {flex: 1},
   greeting: {fontSize: Typography.sizes.md, fontWeight: 'bold'},
+  badgeRow: {flexDirection: 'row', alignItems: 'center', gap: 4},
+  btnRow: {flexDirection: 'row', alignItems: 'center', gap: 6},
+  iconWrapper: {marginRight: Spacing.sm, width: 28, alignItems: 'center'},
+  tipIconWrapper: {marginRight: Spacing.sm, width: 32, alignItems: 'center'},
   zoneBadge: {
     alignSelf: 'flex-start',
     paddingHorizontal: Spacing.xs,

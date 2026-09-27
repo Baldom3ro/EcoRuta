@@ -13,15 +13,16 @@ import {
 import {useTheme} from '../../context/ThemeContext';
 import {useAuth} from '../../context/AuthContext';
 import {TruckService} from '../../services';
+import {Icon, IconName} from '../../components/Icon';
 import {Typography, Spacing} from '../../theme';
 
 type IncidentType = 'breakdown' | 'road_block' | 'accident' | 'other';
 
-const INCIDENT_TYPES: {key: IncidentType; label: string; icon: string}[] = [
-  {key: 'breakdown', label: 'Falla Mecánica', icon: '🔧'},
-  {key: 'road_block', label: 'Calle Bloqueada', icon: '🚧'},
-  {key: 'accident', label: 'Accidente', icon: '🚨'},
-  {key: 'other', label: 'Otro Percance', icon: '⚠️'},
+const INCIDENT_TYPES: {key: IncidentType; label: string; icon: IconName}[] = [
+  {key: 'breakdown', label: 'Falla Mecánica', icon: 'wrench'},
+  {key: 'road_block', label: 'Calle Bloqueada', icon: 'barrier'},
+  {key: 'accident', label: 'Accidente', icon: 'alert'},
+  {key: 'other', label: 'Otro Percance', icon: 'warning'},
 ];
 
 const ReportIncidentScreen: React.FC<{navigation: any}> = ({navigation}) => {
@@ -81,6 +82,7 @@ const ReportIncidentScreen: React.FC<{navigation: any}> = ({navigation}) => {
       <View style={styles.typesGrid}>
         {INCIDENT_TYPES.map(item => {
           const isSelected = selectedType === item.key;
+          const iconColor = isSelected ? '#FFFFFF' : colors.primary;
           return (
             <TouchableOpacity
               key={item.key}
@@ -92,7 +94,9 @@ const ReportIncidentScreen: React.FC<{navigation: any}> = ({navigation}) => {
                 },
               ]}
               onPress={() => setSelectedType(item.key)}>
-              <Text style={styles.typeIcon}>{item.icon}</Text>
+              <View style={styles.iconBox}>
+                <Icon name={item.icon} size={26} color={iconColor} />
+              </View>
               <Text
                 style={[
                   styles.typeLabel,
@@ -162,9 +166,12 @@ const ReportIncidentScreen: React.FC<{navigation: any}> = ({navigation}) => {
         ]}
         onPress={handleSubmit}
         disabled={loading}>
-        <Text style={styles.submitText}>
-          {loading ? 'Enviando...' : '🚨 Enviar Reporte de Incidente'}
-        </Text>
+        <View style={styles.btnRow}>
+          <Icon name="alert" size={18} color="#FFFFFF" />
+          <Text style={styles.submitText}>
+            {loading ? 'Enviando...' : 'Enviar Reporte de Incidente'}
+          </Text>
+        </View>
       </TouchableOpacity>
     </ScrollView>
   );
@@ -173,6 +180,7 @@ const ReportIncidentScreen: React.FC<{navigation: any}> = ({navigation}) => {
 const styles = StyleSheet.create({
   container: {flex: 1},
   content: {padding: Spacing.md},
+  btnRow: {flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 6},
   title: {fontSize: Typography.sizes.xl, fontWeight: 'bold', marginBottom: Spacing.xs},
   subtitle: {fontSize: Typography.sizes.sm, marginBottom: Spacing.lg},
   label: {fontSize: Typography.sizes.md, fontWeight: 'bold', marginBottom: Spacing.xs, marginTop: Spacing.sm},
@@ -184,7 +192,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     alignItems: 'center',
   },
-  typeIcon: {fontSize: 28, marginBottom: Spacing.xs},
+  iconBox: {marginBottom: Spacing.xs},
   typeLabel: {fontSize: Typography.sizes.sm, fontWeight: '600', textAlign: 'center'},
   selectedText: {color: '#FFFFFF'},
   input: {

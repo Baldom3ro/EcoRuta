@@ -12,15 +12,16 @@ import {
 import {useTheme} from '../../context/ThemeContext';
 import {useAuth} from '../../context/AuthContext';
 import {ReportService} from '../../services';
+import {Icon, IconName} from '../../components/Icon';
 import {Typography, Spacing, BorderRadius} from '../../theme';
 
 type ReportType = 'missed_pickup' | 'overflowing' | 'blocked_access' | 'other';
 
-const reportTypes: {value: ReportType; label: string; icon: string}[] = [
-  {value: 'missed_pickup', label: 'No pasó la basura', icon: '🚛'},
-  {value: 'overflowing', label: 'Contenedor lleno', icon: '🗑️'},
-  {value: 'blocked_access', label: 'Acceso bloqueado', icon: '🚧'},
-  {value: 'other', label: 'Otro', icon: '📝'},
+const reportTypes: {value: ReportType; label: string; icon: IconName}[] = [
+  {value: 'missed_pickup', label: 'No pasó la basura', icon: 'truck'},
+  {value: 'overflowing', label: 'Contenedor lleno', icon: 'trash'},
+  {value: 'blocked_access', label: 'Acceso bloqueado', icon: 'barrier'},
+  {value: 'other', label: 'Otro', icon: 'file-text'},
 ];
 
 const CreateReportScreen: React.FC = () => {
@@ -63,6 +64,7 @@ const CreateReportScreen: React.FC = () => {
       <View style={styles.typesRow}>
         {reportTypes.map(rt => {
           const isSelected = type === rt.value;
+          const iconColor = isSelected ? '#FFFFFF' : colors.primary;
           return (
             <TouchableOpacity
               key={rt.value}
@@ -74,7 +76,9 @@ const CreateReportScreen: React.FC = () => {
                 },
               ]}
               onPress={() => setType(rt.value)}>
-              <Text style={styles.typeIcon}>{rt.icon}</Text>
+              <View style={styles.iconBox}>
+                <Icon name={rt.icon} size={26} color={iconColor} />
+              </View>
               <Text
                 style={[
                   styles.typeLabel,
@@ -108,9 +112,12 @@ const CreateReportScreen: React.FC = () => {
 
       <TouchableOpacity
         style={[styles.photoButton, {borderColor: colors.border}]}>
-        <Text style={[styles.photoText, {color: colors.textSecondary}]}>
-          📷 Adjuntar foto (opcional)
-        </Text>
+        <View style={styles.photoRow}>
+          <Icon name="camera" size={20} color={colors.textSecondary} />
+          <Text style={[styles.photoText, {color: colors.textSecondary}]}>
+            Adjuntar foto (opcional)
+          </Text>
+        </View>
       </TouchableOpacity>
 
       <TouchableOpacity
@@ -144,7 +151,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     alignItems: 'center',
   },
-  typeIcon: {fontSize: 28, marginBottom: Spacing.xs},
+  iconBox: {marginBottom: Spacing.xs},
   typeLabel: {fontSize: Typography.sizes.sm, textAlign: 'center'},
   selectedText: {color: '#FFFFFF'},
   input: {
@@ -161,6 +168,7 @@ const styles = StyleSheet.create({
     padding: Spacing.lg,
     alignItems: 'center',
   },
+  photoRow: {flexDirection: 'row', alignItems: 'center', gap: Spacing.xs},
   photoText: {fontSize: Typography.sizes.md},
   submitButton: {
     padding: Spacing.md,

@@ -9,24 +9,23 @@ import {
 } from 'react-native';
 import {useTheme} from '../../context/ThemeContext';
 import {useAuth} from '../../context/AuthContext';
+import {Icon, IconName} from '../../components/Icon';
 import {Typography, Spacing, BorderRadius} from '../../theme';
 
 const SettingsScreen: React.FC = () => {
   const {colors, mode, toggleTheme} = useTheme();
   const {user, logout} = useAuth();
 
-  const settingsItems = [
+  const settingsItems: {icon: IconName; label: string; subtitle: string}[] = [
     {
-      icon: '👤',
+      icon: 'user',
       label: user?.name || 'Usuario',
       subtitle: user?.email || '',
-      action: undefined,
     },
     {
-      icon: '📍',
+      icon: 'map-pin',
       label: 'Mi zona',
       subtitle: user?.zone || 'Sin zona',
-      action: undefined,
     },
   ];
 
@@ -36,7 +35,9 @@ const SettingsScreen: React.FC = () => {
         <View
           key={i}
           style={[styles.row, {backgroundColor: colors.surface, borderColor: colors.border}]}>
-          <Text style={styles.icon}>{item.icon}</Text>
+          <View style={styles.iconWrapper}>
+            <Icon name={item.icon} size={22} color={colors.primary} />
+          </View>
           <View style={styles.textBlock}>
             <Text style={[styles.label, {color: colors.text}]}>{item.label}</Text>
             {item.subtitle ? (
@@ -50,7 +51,9 @@ const SettingsScreen: React.FC = () => {
 
       <View
         style={[styles.row, {backgroundColor: colors.surface, borderColor: colors.border}]}>
-        <Text style={styles.icon}>{mode === 'dark' ? '🌙' : '☀️'}</Text>
+        <View style={styles.iconWrapper}>
+          <Icon name="moon" size={22} color={colors.primary} />
+        </View>
         <Text style={[styles.label, {color: colors.text}]}>
           Modo oscuro
         </Text>
@@ -65,7 +68,10 @@ const SettingsScreen: React.FC = () => {
       <TouchableOpacity
         style={[styles.logoutButton, {backgroundColor: colors.error}]}
         onPress={logout}>
-        <Text style={styles.logoutText}>Cerrar sesión</Text>
+        <View style={styles.logoutRow}>
+          <Icon name="log-out" size={20} color="#FFFFFF" />
+          <Text style={styles.logoutText}>Cerrar sesión</Text>
+        </View>
       </TouchableOpacity>
     </View>
   );
@@ -80,7 +86,7 @@ const styles = StyleSheet.create({
     borderRadius: BorderRadius.md,
     borderWidth: 1,
   },
-  icon: {fontSize: 24, marginRight: Spacing.md},
+  iconWrapper: {marginRight: Spacing.md, width: 28, alignItems: 'center'},
   textBlock: {flex: 1},
   label: {fontSize: Typography.sizes.md, fontWeight: '500', flex: 1},
   subtitle: {fontSize: Typography.sizes.sm, marginTop: 2},
@@ -90,6 +96,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: Spacing.lg,
   },
+  logoutRow: {flexDirection: 'row', alignItems: 'center', gap: Spacing.xs},
   logoutText: {color: '#FFF', fontSize: Typography.sizes.md, fontWeight: '600'},
 });
 

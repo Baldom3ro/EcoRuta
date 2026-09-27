@@ -10,6 +10,7 @@ import {
 import {useTheme} from '../../context/ThemeContext';
 import {useAuth} from '../../context/AuthContext';
 import {TruckService} from '../../services';
+import {Icon} from '../../components/Icon';
 import {Typography, Spacing} from '../../theme';
 
 interface HistoryItem {
@@ -73,15 +74,24 @@ const HistoryScreen: React.FC = () => {
         </View>
 
         <View style={styles.detailsRow}>
-          <Text style={[styles.detailText, {color: colors.textSecondary}]}>
-            📅 {item.date}
-          </Text>
-          <Text style={[styles.detailText, {color: colors.textSecondary}]}>
-            ⏱️ {item.durationMinutes} min
-          </Text>
-          <Text style={[styles.detailText, {color: colors.textSecondary}]}>
-            🚨 {item.incidentsCount} incidentes
-          </Text>
+          <View style={styles.detailItem}>
+            <Icon name="calendar" size={14} color={colors.textSecondary} />
+            <Text style={[styles.detailText, {color: colors.textSecondary}]}>
+              {item.date}
+            </Text>
+          </View>
+          <View style={styles.detailItem}>
+            <Icon name="clock" size={14} color={colors.textSecondary} />
+            <Text style={[styles.detailText, {color: colors.textSecondary}]}>
+              {item.durationMinutes} min
+            </Text>
+          </View>
+          <View style={styles.detailItem}>
+            <Icon name="alert" size={14} color={colors.textSecondary} />
+            <Text style={[styles.detailText, {color: colors.textSecondary}]}>
+              {item.incidentsCount} incidentes
+            </Text>
+          </View>
         </View>
       </View>
     );
@@ -144,6 +154,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginTop: Spacing.xs,
+  },
+  detailItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
   },
   detailText: {
     fontSize: Typography.sizes.xs,

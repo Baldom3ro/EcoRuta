@@ -12,6 +12,7 @@ import {
 import {useTheme} from '../../context/ThemeContext';
 import {ReportService, TruckService} from '../../services';
 import {Report, Incident} from '../../services/types';
+import {Icon} from '../../components/Icon';
 import {Typography, Spacing} from '../../theme';
 
 const AlertsScreen: React.FC<{navigation: any}> = ({navigation}) => {
@@ -44,9 +45,12 @@ const AlertsScreen: React.FC<{navigation: any}> = ({navigation}) => {
         {backgroundColor: colors.surface, borderColor: colors.border},
       ]}>
       <View style={styles.cardHeader}>
-        <Text style={[styles.cardTitle, {color: colors.text}]}>
-          📍 {item.address || 'Ubicación reportada'}
-        </Text>
+        <View style={styles.titleRow}>
+          <Icon name="map-pin" size={16} color={colors.primary} />
+          <Text style={[styles.cardTitle, {color: colors.text}]}>
+            {item.address || 'Ubicación reportada'}
+          </Text>
+        </View>
         <View style={[styles.badge, {backgroundColor: colors.warning + '20'}]}>
           <Text style={[styles.badgeText, {color: colors.warning}]}>
             {item.status.toUpperCase()}
@@ -80,9 +84,12 @@ const AlertsScreen: React.FC<{navigation: any}> = ({navigation}) => {
         {backgroundColor: colors.surface, borderColor: colors.border},
       ]}>
       <View style={styles.cardHeader}>
-        <Text style={[styles.cardTitle, {color: colors.error}]}>
-          🚨 {item.type.replace('_', ' ').toUpperCase()}
-        </Text>
+        <View style={styles.titleRow}>
+          <Icon name="alert" size={16} color={colors.error} />
+          <Text style={[styles.cardTitle, {color: colors.error}]}>
+            {item.type.replace('_', ' ').toUpperCase()}
+          </Text>
+        </View>
         <View style={[styles.badge, {backgroundColor: colors.error + '20'}]}>
           <Text style={[styles.badgeText, {color: colors.error}]}>
             INCIDENTE
@@ -113,7 +120,10 @@ const AlertsScreen: React.FC<{navigation: any}> = ({navigation}) => {
       <TouchableOpacity
         style={[styles.reportBtn, {backgroundColor: colors.error}]}
         onPress={() => navigation.navigate('ReportIncident')}>
-        <Text style={styles.reportBtnText}>🚨 Reportar Percance / Suspender Ruta</Text>
+        <View style={styles.btnRow}>
+          <Icon name="alert" size={18} color="#FFFFFF" />
+          <Text style={styles.reportBtnText}>Reportar Percance / Suspender Ruta</Text>
+        </View>
       </TouchableOpacity>
 
       {/* Tabs */}
@@ -198,6 +208,8 @@ const AlertsScreen: React.FC<{navigation: any}> = ({navigation}) => {
 
 const styles = StyleSheet.create({
   container: {flex: 1},
+  btnRow: {flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 6},
+  titleRow: {flex: 1, flexDirection: 'row', alignItems: 'center', gap: 6},
   reportBtn: {
     margin: Spacing.md,
     padding: Spacing.md,

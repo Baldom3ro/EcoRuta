@@ -4,6 +4,7 @@ import {View, Text, FlatList, StyleSheet} from 'react-native';
 import {useTheme} from '../../context/ThemeContext';
 import {ReportService} from '../../services';
 import {Report} from '../../services/types';
+import {Icon} from '../../components/Icon';
 import {Typography, Spacing, BorderRadius} from '../../theme';
 
 const statusLabels: Record<string, {label: string; color: string}> = {
@@ -34,21 +35,34 @@ const MyReportsScreen: React.FC = () => {
     return (
       <View style={[styles.card, {backgroundColor: colors.surface, borderColor: colors.border}]}>
         <View style={styles.header}>
-          <Text style={[styles.type, {color: colors.text}]}>
-            {item.type === 'missed_pickup' ? '🚛' : '📋'} {item.description}
-          </Text>
+          <View style={styles.titleRow}>
+            <Icon
+              name={item.type === 'missed_pickup' ? 'truck' : 'file-text'}
+              size={18}
+              color={colors.primary}
+            />
+            <Text style={[styles.type, {color: colors.text}]}>
+              {item.description}
+            </Text>
+          </View>
           <View style={[styles.badge, {backgroundColor: status.color}]}>
             <Text style={styles.badgeText}>{status.label}</Text>
           </View>
         </View>
         {item.address && (
-          <Text style={[styles.address, {color: colors.textSecondary}]}>
-            📍 {item.address}
-          </Text>
+          <View style={styles.infoRow}>
+            <Icon name="map-pin" size={14} color={colors.textSecondary} />
+            <Text style={[styles.address, {color: colors.textSecondary}]}>
+              {item.address}
+            </Text>
+          </View>
         )}
-        <Text style={[styles.date, {color: colors.textSecondary}]}>
-          {new Date(item.createdAt).toLocaleDateString('es-MX')}
-        </Text>
+        <View style={styles.infoRow}>
+          <Icon name="calendar" size={14} color={colors.textSecondary} />
+          <Text style={[styles.date, {color: colors.textSecondary}]}>
+            {new Date(item.createdAt).toLocaleDateString('es-MX')}
+          </Text>
+        </View>
       </View>
     );
   };
@@ -91,7 +105,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'flex-start',
+    marginBottom: Spacing.xs,
   },
+  titleRow: {flex: 1, flexDirection: 'row', alignItems: 'center', gap: Spacing.xs, paddingRight: Spacing.sm},
+  infoRow: {flexDirection: 'row', alignItems: 'center', gap: 6, marginTop: 4},
   type: {flex: 1, fontSize: Typography.sizes.md, fontWeight: '500'},
   badge: {
     paddingHorizontal: Spacing.sm,
@@ -99,8 +116,8 @@ const styles = StyleSheet.create({
     borderRadius: BorderRadius.full,
   },
   badgeText: {color: '#FFF', fontSize: Typography.sizes.xs, fontWeight: '600'},
-  address: {fontSize: Typography.sizes.sm, marginTop: Spacing.xs},
-  date: {fontSize: Typography.sizes.xs, marginTop: Spacing.xs},
+  address: {fontSize: Typography.sizes.sm},
+  date: {fontSize: Typography.sizes.xs},
   empty: {textAlign: 'center', marginTop: Spacing.xxl, fontSize: Typography.sizes.md},
 });
 

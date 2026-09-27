@@ -10,14 +10,15 @@ import {
 import {useTheme} from '../../context/ThemeContext';
 import {NotificationService} from '../../services';
 import {Notification} from '../../services/types';
+import {Icon, IconName} from '../../components/Icon';
 import {Typography, Spacing, BorderRadius} from '../../theme';
 
-const notifIcons: Record<string, string> = {
-  proximity: '📍',
-  time_estimate: '⏰',
-  route_suspended: '🚫',
-  incident: '⚠️',
-  tip: '💡',
+const notifIconNames: Record<string, IconName> = {
+  proximity: 'map-pin',
+  time_estimate: 'clock',
+  route_suspended: 'warning',
+  incident: 'alert',
+  tip: 'lightbulb',
 };
 
 const NotificationsScreen: React.FC = () => {
@@ -53,7 +54,13 @@ const NotificationsScreen: React.FC = () => {
         },
       ]}
       onPress={() => handleMarkRead(item.id)}>
-      <Text style={styles.icon}>{notifIcons[item.type] || '🔔'}</Text>
+      <View style={styles.iconContainer}>
+        <Icon
+          name={notifIconNames[item.type] || 'bell'}
+          size={24}
+          color={colors.primary}
+        />
+      </View>
       <View style={styles.content}>
         <Text style={[styles.title, {color: colors.text}]}>{item.title}</Text>
         <Text style={[styles.message, {color: colors.textSecondary}]}>
@@ -108,7 +115,7 @@ const styles = StyleSheet.create({
     borderRadius: BorderRadius.md,
     borderWidth: 1,
   },
-  icon: {fontSize: 28, marginRight: Spacing.md},
+  iconContainer: {marginRight: Spacing.md, width: 32, alignItems: 'center'},
   content: {flex: 1},
   title: {fontSize: Typography.sizes.md, fontWeight: '600'},
   message: {fontSize: Typography.sizes.sm, marginTop: 2},

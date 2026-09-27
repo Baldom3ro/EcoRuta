@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import {useTheme} from '../../context/ThemeContext';
 import MapView from '../../components/MapView';
+import {Icon} from '../../components/Icon';
 import {TruckService} from '../../services';
 import {Route} from '../../services/types';
 import {Typography, Spacing} from '../../theme';
@@ -99,23 +100,36 @@ const DriverHomeScreen: React.FC<{navigation: any}> = ({navigation}) => {
             },
           ]}
           onPress={toggleShift}>
-          <Text style={styles.actionText}>
-            {shiftStatus === 'active' ? '⏸️ Pausar Recorrido' : '▶️ Iniciar Recorrido'}
-          </Text>
+          <View style={styles.btnRow}>
+            <Icon
+              name={shiftStatus === 'active' ? 'pause' : 'play'}
+              size={16}
+              color="#FFFFFF"
+            />
+            <Text style={styles.actionText}>
+              {shiftStatus === 'active' ? 'Pausar Recorrido' : 'Iniciar Recorrido'}
+            </Text>
+          </View>
         </TouchableOpacity>
 
         <TouchableOpacity
           style={[styles.actionButton, {backgroundColor: colors.error}]}
           onPress={() => navigation.navigate('AlertsTab', {screen: 'ReportIncident'})}>
-          <Text style={styles.actionText}>🚨 Reportar Percance</Text>
+          <View style={styles.btnRow}>
+            <Icon name="alert" size={16} color="#FFFFFF" />
+            <Text style={styles.actionText}>Reportar Percance</Text>
+          </View>
         </TouchableOpacity>
       </View>
 
       {/* Puntos de Recolección (HU-D01) */}
       <View style={[styles.section, {backgroundColor: colors.surface, borderColor: colors.border}]}>
-        <Text style={[styles.sectionTitle, {color: colors.primaryDark}]}>
-          📍 Puntos de Recolección Asignados
-        </Text>
+        <View style={styles.btnRow}>
+          <Icon name="map-pin" size={18} color={colors.primaryDark} />
+          <Text style={[styles.sectionTitle, {color: colors.primaryDark}]}>
+            Puntos de Recolección Asignados
+          </Text>
+        </View>
 
         {loading ? (
           <ActivityIndicator size="small" color={colors.primary} />
@@ -147,6 +161,7 @@ const DriverHomeScreen: React.FC<{navigation: any}> = ({navigation}) => {
 const styles = StyleSheet.create({
   container: {flex: 1},
   content: {padding: Spacing.md},
+  btnRow: {flexDirection: 'row', alignItems: 'center', gap: 6},
   headerCard: {
     padding: Spacing.md,
     borderRadius: 16,

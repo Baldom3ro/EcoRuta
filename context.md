@@ -348,3 +348,9 @@ EcoRuta/
 - Rediseñada la pantalla `CitizenHomeScreen` incorporando tarjeta ETA verde con distancia/tiempo restante, mapa OpenStreetMap interactivo, accesos rápidos de reporte, notificaciones y tips interactivos
 - Verificadas las pantallas de Reportar (`CreateReportScreen`), Mis Reportes (`MyReportsScreen`), Notificaciones (`NotificationsScreen`) y Configuración (`SettingsScreen`)
 - Validado paso limpio de `npx tsc --noEmit` y `npm run lint` (0 errores, 0 advertencias)
+
+### Commit 8 — Sustitución de emojis por íconos vectoriales SVG profesionales
+- Creado componente universal de íconos vectoriales SVG `src/components/Icon.tsx` integrando `react-native-svg`
+- Reemplazados todos los emojis por íconos SVG estilizados en las pantallas y tabs de ciudadano (`CitizenHomeScreen`, `CreateReportScreen`, `NotificationsScreen`, `MyReportsScreen`, `SettingsScreen`, `CitizenTabs`)
+- Reemplazados emojis por íconos SVG estilizados en las pantallas y tabs de conductor (`DriverHomeScreen`, `AlertsScreen`, `ReportIncidentScreen`, `HistoryScreen`, `DriverSettingsScreen`, `DriverTabs`)
+- Validado paso limpio de `npx tsc --noEmit` y `npm run lint` (0 errores, 0 advertencias)

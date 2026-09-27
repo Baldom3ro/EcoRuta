@@ -2,7 +2,6 @@
 import React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {Text, StyleSheet} from 'react-native';
 import CitizenHomeScreen from '../screens/citizen/CitizenHomeScreen';
 import NotificationsScreen from '../screens/citizen/NotificationsScreen';
 import MyReportsScreen from '../screens/citizen/MyReportsScreen';
@@ -13,23 +12,19 @@ import {useTheme} from '../context/ThemeContext';
 const Tab = createBottomTabNavigator();
 const ReportsStack = createNativeStackNavigator();
 
-const styles = StyleSheet.create({
-  tabIcon: {
-    fontSize: 20,
-  },
-});
+import {Icon} from '../components/Icon';
 
 const renderHomeIcon = ({color}: {color: string}) => (
-  <Text style={[styles.tabIcon, {color}]}>🏠</Text>
+  <Icon name="home" size={20} color={color} />
 );
 const renderBellIcon = ({color}: {color: string}) => (
-  <Text style={[styles.tabIcon, {color}]}>🔔</Text>
+  <Icon name="bell" size={20} color={color} />
 );
 const renderReportIcon = ({color}: {color: string}) => (
-  <Text style={[styles.tabIcon, {color}]}>📋</Text>
+  <Icon name="file-text" size={20} color={color} />
 );
 const renderSettingsIcon = ({color}: {color: string}) => (
-  <Text style={[styles.tabIcon, {color}]}>⚙️</Text>
+  <Icon name="settings" size={20} color={color} />
 );
 
 // Stack de reportes: Mis Reportes → Crear Reporte

@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import {useTheme} from '../../context/ThemeContext';
 import {useAuth} from '../../context/AuthContext';
+import {Icon} from '../../components/Icon';
 import {Typography, Spacing} from '../../theme';
 
 const DriverSettingsScreen: React.FC = () => {
@@ -33,7 +34,7 @@ const DriverSettingsScreen: React.FC = () => {
       {/* Perfil */}
       <View style={[styles.profileCard, {backgroundColor: colors.surface, borderColor: colors.border}]}>
         <View style={[styles.avatar, {backgroundColor: colors.primary}]}>
-          <Text style={styles.avatarText}>🚛</Text>
+          <Icon name="truck" size={30} color="#FFFFFF" />
         </View>
         <View style={styles.profileInfo}>
           <Text style={[styles.name, {color: colors.text}]}>
@@ -110,9 +111,12 @@ const DriverSettingsScreen: React.FC = () => {
       <TouchableOpacity
         style={[styles.logoutButton, {borderColor: colors.error}]}
         onPress={handleLogout}>
-        <Text style={[styles.logoutText, {color: colors.error}]}>
-          🚪 Cerrar Sesión de Conductor
-        </Text>
+        <View style={styles.logoutRow}>
+          <Icon name="log-out" size={20} color={colors.error} />
+          <Text style={[styles.logoutText, {color: colors.error}]}>
+            Cerrar Sesión de Conductor
+          </Text>
+        </View>
       </TouchableOpacity>
     </ScrollView>
   );
@@ -137,7 +141,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginRight: Spacing.md,
   },
-  avatarText: {fontSize: 28},
   profileInfo: {flex: 1},
   name: {fontSize: Typography.sizes.lg, fontWeight: 'bold'},
   role: {fontSize: Typography.sizes.xs, fontWeight: 'bold', marginVertical: 2},
@@ -176,6 +179,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: Spacing.md,
   },
+  logoutRow: {flexDirection: 'row', alignItems: 'center', gap: Spacing.xs},
   logoutText: {
     fontSize: Typography.sizes.md,
     fontWeight: 'bold',

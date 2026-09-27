@@ -2,7 +2,6 @@
 import React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {Text, StyleSheet} from 'react-native';
 import DriverHomeScreen from '../screens/driver/DriverHomeScreen';
 import AlertsScreen from '../screens/driver/AlertsScreen';
 import ReportIncidentScreen from '../screens/driver/ReportIncidentScreen';
@@ -13,23 +12,19 @@ import {useTheme} from '../context/ThemeContext';
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
-const styles = StyleSheet.create({
-  tabIcon: {
-    fontSize: 20,
-  },
-});
+import {Icon} from '../components/Icon';
 
 const renderRouteIcon = ({color}: {color: string}) => (
-  <Text style={[styles.tabIcon, {color}]}>🗺️</Text>
+  <Icon name="truck" size={20} color={color} />
 );
 const renderAlertIcon = ({color}: {color: string}) => (
-  <Text style={[styles.tabIcon, {color}]}>⚠️</Text>
+  <Icon name="alert" size={20} color={color} />
 );
 const renderHistoryIcon = ({color}: {color: string}) => (
-  <Text style={[styles.tabIcon, {color}]}>📊</Text>
+  <Icon name="history" size={20} color={color} />
 );
 const renderSettingsIcon = ({color}: {color: string}) => (
-  <Text style={[styles.tabIcon, {color}]}>⚙️</Text>
+  <Icon name="settings" size={20} color={color} />
 );
 
 const AlertsStack: React.FC = () => {
