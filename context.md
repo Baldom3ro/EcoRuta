@@ -399,3 +399,9 @@ EcoRuta/
 - Añadido modal desplegable de detalle de reporte para conductor y ciudadano mostrando tipo, usuario, dirección, coordenadas GPS, fecha/hora, descripción completa y foto adjunta
 - Implementada función `updateReportStatus` en `reportService.mock.ts` permitiendo al conductor cambiar el estado del reporte ("En Revisión", "Resolver")
 - Validado paso limpio de `npx tsc --noEmit` y `npm run lint` (0 errores, 0 advertencias)
+
+### Commit 17 — Solución de Botón de Retroceso en Reporte de Incidente
+- Configurado `headerLeft` explícito en `DriverTabs.tsx` con ícono `arrow-left` para garantizar presencia del botón de regreso a "Mi Ruta" / "Alertas" independientemente del origen de navegación
+- Añadidos íconos SVG `chevron-left` y `arrow-left` en `src/components/Icon.tsx`
+- Actualizada la lógica de retorno en `ReportIncidentScreen.tsx` para usar fallback seguro `navigation.navigate('DriverHome')` si no hay stack previo
+- Validado paso limpio de `npx tsc --noEmit` y `npm run lint` (0 errores, 0 advertencias)

@@ -58,7 +58,18 @@ const ReportIncidentScreen: React.FC<{navigation: any}> = ({navigation}) => {
         alertUsers
           ? 'Se ha notificado al supervisor y enviado alerta masiva a ciudadanos.'
           : 'Se ha notificado al supervisor.',
-        [{text: 'OK', onPress: () => navigation.goBack()}],
+        [
+          {
+            text: 'OK',
+            onPress: () => {
+              if (navigation.canGoBack()) {
+                navigation.goBack();
+              } else {
+                navigation.navigate('DriverHome');
+              }
+            },
+          },
+        ],
       );
     } catch {
       Alert.alert('Error', 'No se pudo enviar el reporte.');

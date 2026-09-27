@@ -1,5 +1,5 @@
-// Stack y Tabs de navegación del conductor (HU-D01, HU-D02, HU-D03, HU-D04)
 import React from 'react';
+import {TouchableOpacity, StyleSheet} from 'react-native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import DriverHomeScreen from '../screens/driver/DriverHomeScreen';
@@ -8,11 +8,10 @@ import ReportIncidentScreen from '../screens/driver/ReportIncidentScreen';
 import HistoryScreen from '../screens/driver/HistoryScreen';
 import DriverSettingsScreen from '../screens/driver/DriverSettingsScreen';
 import {useTheme} from '../context/ThemeContext';
+import {Icon} from '../components/Icon';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
-
-import {Icon} from '../components/Icon';
 
 const renderRouteIcon = ({color}: {color: string}) => (
   <Icon name="truck" size={20} color={color} />
@@ -26,6 +25,27 @@ const renderHistoryIcon = ({color}: {color: string}) => (
 const renderSettingsIcon = ({color}: {color: string}) => (
   <Icon name="settings" size={20} color={color} />
 );
+
+const BackHeaderButton: React.FC<{navigation: any; color: string}> = ({
+  navigation,
+  color,
+}) => (
+  <TouchableOpacity
+    style={styles.backBtn}
+    onPress={() => {
+      if (navigation.canGoBack()) {
+        navigation.goBack();
+      } else {
+        navigation.navigate('DriverHome');
+      }
+    }}>
+    <Icon name="arrow-left" size={22} color={color} />
+  </TouchableOpacity>
+);
+
+const renderReportHeaderLeft = (stackNav: any, primaryColor: string) => {
+  return <BackHeaderButton navigation={stackNav} color={primaryColor} />;
+};
 
 const AlertsStack: React.FC = () => {
   const {colors} = useTheme();
@@ -44,7 +64,10 @@ const AlertsStack: React.FC = () => {
       <Stack.Screen
         name="ReportIncident"
         component={ReportIncidentScreen}
-        options={{title: 'Reportar Percance'}}
+        options={({navigation: stackNav}) => ({
+          title: 'Reportar Percance',
+          headerLeft: () => renderReportHeaderLeft(stackNav, colors.primary),
+        })}
       />
     </Stack.Navigator>
   );
@@ -98,5 +121,13 @@ const DriverTabs: React.FC = () => {
     </Tab.Navigator>
   );
 };
+
+const styles = StyleSheet.create({
+  backBtn: {
+    marginRight: 12,
+    paddingVertical: 4,
+    paddingHorizontal: 4,
+  },
+});
 
 export default DriverTabs;
