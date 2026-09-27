@@ -58,7 +58,7 @@ export const reportIncident = async (
 export const sendZoneAlert = async (
   _routeId: string,
   _zone: string,
-  message: string,
+  _message: string,
 ): Promise<{sent: boolean; usersNotified: number}> => {
   await new Promise<void>(resolve => setTimeout(resolve, 1000));
 

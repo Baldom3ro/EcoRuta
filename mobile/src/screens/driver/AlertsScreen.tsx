@@ -121,10 +121,10 @@ const AlertsScreen: React.FC<{navigation: any}> = ({navigation}) => {
         <TouchableOpacity
           style={[
             styles.tab,
-            activeTab === 'citizen' && {
-              borderBottomColor: colors.primary,
-              borderBottomWidth: 3,
-            },
+            activeTab === 'citizen' && [
+              styles.activeTabBorder,
+              {borderBottomColor: colors.primary},
+            ],
           ]}
           onPress={() => setActiveTab('citizen')}>
           <Text
@@ -142,10 +142,10 @@ const AlertsScreen: React.FC<{navigation: any}> = ({navigation}) => {
         <TouchableOpacity
           style={[
             styles.tab,
-            activeTab === 'driver' && {
-              borderBottomColor: colors.primary,
-              borderBottomWidth: 3,
-            },
+            activeTab === 'driver' && [
+              styles.activeTabBorder,
+              {borderBottomColor: colors.primary},
+            ],
           ]}
           onPress={() => setActiveTab('driver')}>
           <Text
@@ -217,6 +217,9 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingVertical: Spacing.md,
     alignItems: 'center',
+  },
+  activeTabBorder: {
+    borderBottomWidth: 3,
   },
   tabText: {
     fontSize: Typography.sizes.sm,

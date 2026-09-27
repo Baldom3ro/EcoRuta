@@ -51,7 +51,7 @@ const SettingsScreen: React.FC = () => {
       <View
         style={[styles.row, {backgroundColor: colors.surface, borderColor: colors.border}]}>
         <Text style={styles.icon}>{mode === 'dark' ? '🌙' : '☀️'}</Text>
-        <Text style={[styles.label, {color: colors.text, flex: 1}]}>
+        <Text style={[styles.label, {color: colors.text}]}>
           Modo oscuro
         </Text>
         <Switch
@@ -82,7 +82,7 @@ const styles = StyleSheet.create({
   },
   icon: {fontSize: 24, marginRight: Spacing.md},
   textBlock: {flex: 1},
-  label: {fontSize: Typography.sizes.md, fontWeight: '500'},
+  label: {fontSize: Typography.sizes.md, fontWeight: '500', flex: 1},
   subtitle: {fontSize: Typography.sizes.sm, marginTop: 2},
   logoutButton: {
     padding: Spacing.md,

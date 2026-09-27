@@ -337,3 +337,9 @@ EcoRuta/
 - Actualizado `theme/index.ts` con la paleta de colores exacta de `design-system.md` (#2E7D32, #1F4D3A, #1F5F8C, #F7F3E8)
 - Actualizado `CitizenHomeScreen` y `DriverHomeScreen` reemplazando placeholders por mapas interactivos reales de OpenStreetMap
 - Pruebas unitarias pasando correctamente
+
+### Commit 6 — Solución de advertencias y errores de ESLint en GitHub Actions CI
+- Corregidos errores de variables no utilizadas en `CitizenHomeScreen.tsx` y `notificationService.mock.ts`
+- Corregida regla de componentes anidados en `CitizenTabs.tsx` y `DriverTabs.tsx` moviendo renderers de iconos fuera de las funciones de tab
+- Eliminados inline styles en `MapView.tsx`, `CreateReportScreen.tsx`, `SettingsScreen.tsx`, `AlertsScreen.tsx` y `ReportIncidentScreen.tsx`
+- Verificado `npm run lint` localmente con 0 errores y 0 advertencias para garantizar paso verde del workflow de GitHub Actions

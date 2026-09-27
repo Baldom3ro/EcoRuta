@@ -96,7 +96,7 @@ const ReportIncidentScreen: React.FC<{navigation: any}> = ({navigation}) => {
               <Text
                 style={[
                   styles.typeLabel,
-                  {color: isSelected ? '#FFFFFF' : colors.text},
+                  isSelected ? styles.selectedText : {color: colors.text},
                 ]}>
                 {item.label}
               </Text>
@@ -186,6 +186,7 @@ const styles = StyleSheet.create({
   },
   typeIcon: {fontSize: 28, marginBottom: Spacing.xs},
   typeLabel: {fontSize: Typography.sizes.sm, fontWeight: '600', textAlign: 'center'},
+  selectedText: {color: '#FFFFFF'},
   input: {
     borderWidth: 1,
     borderRadius: 12,

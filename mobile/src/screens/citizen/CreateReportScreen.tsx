@@ -61,29 +61,30 @@ const CreateReportScreen: React.FC = () => {
       contentContainerStyle={styles.content}>
       <Text style={[styles.label, {color: colors.text}]}>Tipo de reporte</Text>
       <View style={styles.typesRow}>
-        {reportTypes.map(rt => (
-          <TouchableOpacity
-            key={rt.value}
-            style={[
-              styles.typeCard,
-              {
-                backgroundColor:
-                  type === rt.value ? colors.primary : colors.surface,
-                borderColor:
-                  type === rt.value ? colors.primary : colors.border,
-              },
-            ]}
-            onPress={() => setType(rt.value)}>
-            <Text style={styles.typeIcon}>{rt.icon}</Text>
-            <Text
+        {reportTypes.map(rt => {
+          const isSelected = type === rt.value;
+          return (
+            <TouchableOpacity
+              key={rt.value}
               style={[
-                styles.typeLabel,
-                {color: type === rt.value ? '#FFF' : colors.text},
-              ]}>
-              {rt.label}
-            </Text>
-          </TouchableOpacity>
-        ))}
+                styles.typeCard,
+                {
+                  backgroundColor: isSelected ? colors.primary : colors.surface,
+                  borderColor: isSelected ? colors.primary : colors.border,
+                },
+              ]}
+              onPress={() => setType(rt.value)}>
+              <Text style={styles.typeIcon}>{rt.icon}</Text>
+              <Text
+                style={[
+                  styles.typeLabel,
+                  isSelected ? styles.selectedText : {color: colors.text},
+                ]}>
+                {rt.label}
+              </Text>
+            </TouchableOpacity>
+          );
+        })}
       </View>
 
       <Text style={[styles.label, {color: colors.text}]}>Descripción</Text>
@@ -145,6 +146,7 @@ const styles = StyleSheet.create({
   },
   typeIcon: {fontSize: 28, marginBottom: Spacing.xs},
   typeLabel: {fontSize: Typography.sizes.sm, textAlign: 'center'},
+  selectedText: {color: '#FFFFFF'},
   input: {
     borderWidth: 1,
     borderRadius: BorderRadius.md,

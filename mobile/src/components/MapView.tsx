@@ -14,6 +14,13 @@ export interface MapViewProps {
   style?: StyleProp<ViewStyle>;
 }
 
+const iframeStyle: React.CSSProperties = {
+  width: '100%',
+  height: '100%',
+  border: 'none',
+  borderRadius: 16,
+};
+
 const MapView: React.FC<MapViewProps> = ({
   latitude = 20.6625,
   longitude = -103.3475,
@@ -129,12 +136,7 @@ const MapView: React.FC<MapViewProps> = ({
     <View style={[styles.container, style]}>
       <iframe
         srcDoc={leafletHtml}
-        style={{
-          width: '100%',
-          height: '100%',
-          border: 'none',
-          borderRadius: 16,
-        }}
+        style={iframeStyle}
         title="OpenStreetMap EcoRuta"
       />
     </View>

@@ -6,7 +6,6 @@ import {
   StyleSheet,
   TouchableOpacity,
   ScrollView,
-  ActivityIndicator,
 } from 'react-native';
 import {useTheme} from '../../context/ThemeContext';
 import MapView from '../../components/MapView';
@@ -19,18 +18,16 @@ const CitizenHomeScreen: React.FC<{navigation: any}> = ({navigation}) => {
   const [truckLoc, setTruckLoc] = useState<TruckLocation | null>(null);
   const [tips, setTips] = useState<Tip[]>([]);
   const [currentTipIndex, setCurrentTipIndex] = useState(0);
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const loadData = async () => {
-      setLoading(true);
       try {
         const loc = await TruckService.getTruckLocation();
         const tipsData = await TruckService.getTips();
         setTruckLoc(loc);
         setTips(tipsData);
-      } finally {
-        setLoading(false);
+      } catch {
+        // Ignorar
       }
     };
     loadData();

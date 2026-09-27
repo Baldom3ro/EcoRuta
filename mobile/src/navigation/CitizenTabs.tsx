@@ -2,7 +2,7 @@
 import React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {Text} from 'react-native';
+import {Text, StyleSheet} from 'react-native';
 import CitizenHomeScreen from '../screens/citizen/CitizenHomeScreen';
 import NotificationsScreen from '../screens/citizen/NotificationsScreen';
 import MyReportsScreen from '../screens/citizen/MyReportsScreen';
@@ -12,6 +12,25 @@ import {useTheme} from '../context/ThemeContext';
 
 const Tab = createBottomTabNavigator();
 const ReportsStack = createNativeStackNavigator();
+
+const styles = StyleSheet.create({
+  tabIcon: {
+    fontSize: 20,
+  },
+});
+
+const renderHomeIcon = ({color}: {color: string}) => (
+  <Text style={[styles.tabIcon, {color}]}>🏠</Text>
+);
+const renderBellIcon = ({color}: {color: string}) => (
+  <Text style={[styles.tabIcon, {color}]}>🔔</Text>
+);
+const renderReportIcon = ({color}: {color: string}) => (
+  <Text style={[styles.tabIcon, {color}]}>📋</Text>
+);
+const renderSettingsIcon = ({color}: {color: string}) => (
+  <Text style={[styles.tabIcon, {color}]}>⚙️</Text>
+);
 
 // Stack de reportes: Mis Reportes → Crear Reporte
 const ReportsStackScreen: React.FC = () => {
@@ -54,7 +73,7 @@ const CitizenTabs: React.FC = () => {
         component={CitizenHomeScreen}
         options={{
           title: 'Inicio',
-          tabBarIcon: ({color}) => <Text style={{color, fontSize: 20}}>🏠</Text>,
+          tabBarIcon: renderHomeIcon,
         }}
       />
       <Tab.Screen
@@ -62,7 +81,7 @@ const CitizenTabs: React.FC = () => {
         component={NotificationsScreen}
         options={{
           title: 'Alertas',
-          tabBarIcon: ({color}) => <Text style={{color, fontSize: 20}}>🔔</Text>,
+          tabBarIcon: renderBellIcon,
         }}
       />
       <Tab.Screen
@@ -71,7 +90,7 @@ const CitizenTabs: React.FC = () => {
         options={{
           title: 'Reportes',
           headerShown: false,
-          tabBarIcon: ({color}) => <Text style={{color, fontSize: 20}}>📋</Text>,
+          tabBarIcon: renderReportIcon,
         }}
       />
       <Tab.Screen
@@ -79,7 +98,7 @@ const CitizenTabs: React.FC = () => {
         component={SettingsScreen}
         options={{
           title: 'Ajustes',
-          tabBarIcon: ({color}) => <Text style={{color, fontSize: 20}}>⚙️</Text>,
+          tabBarIcon: renderSettingsIcon,
         }}
       />
     </Tab.Navigator>

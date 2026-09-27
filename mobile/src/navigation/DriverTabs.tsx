@@ -2,7 +2,7 @@
 import React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {Text} from 'react-native';
+import {Text, StyleSheet} from 'react-native';
 import DriverHomeScreen from '../screens/driver/DriverHomeScreen';
 import AlertsScreen from '../screens/driver/AlertsScreen';
 import ReportIncidentScreen from '../screens/driver/ReportIncidentScreen';
@@ -12,6 +12,25 @@ import {useTheme} from '../context/ThemeContext';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
+
+const styles = StyleSheet.create({
+  tabIcon: {
+    fontSize: 20,
+  },
+});
+
+const renderRouteIcon = ({color}: {color: string}) => (
+  <Text style={[styles.tabIcon, {color}]}>🗺️</Text>
+);
+const renderAlertIcon = ({color}: {color: string}) => (
+  <Text style={[styles.tabIcon, {color}]}>⚠️</Text>
+);
+const renderHistoryIcon = ({color}: {color: string}) => (
+  <Text style={[styles.tabIcon, {color}]}>📊</Text>
+);
+const renderSettingsIcon = ({color}: {color: string}) => (
+  <Text style={[styles.tabIcon, {color}]}>⚙️</Text>
+);
 
 const AlertsStack: React.FC = () => {
   const {colors} = useTheme();
@@ -53,7 +72,7 @@ const DriverTabs: React.FC = () => {
         component={DriverHomeScreen}
         options={{
           title: 'Mi Ruta',
-          tabBarIcon: ({color}) => <Text style={{color, fontSize: 20}}>🗺️</Text>,
+          tabBarIcon: renderRouteIcon,
         }}
       />
       <Tab.Screen
@@ -62,7 +81,7 @@ const DriverTabs: React.FC = () => {
         options={{
           headerShown: false,
           title: 'Alertas',
-          tabBarIcon: ({color}) => <Text style={{color, fontSize: 20}}>⚠️</Text>,
+          tabBarIcon: renderAlertIcon,
         }}
       />
       <Tab.Screen
@@ -70,7 +89,7 @@ const DriverTabs: React.FC = () => {
         component={HistoryScreen}
         options={{
           title: 'Historial',
-          tabBarIcon: ({color}) => <Text style={{color, fontSize: 20}}>📊</Text>,
+          tabBarIcon: renderHistoryIcon,
         }}
       />
       <Tab.Screen
@@ -78,7 +97,7 @@ const DriverTabs: React.FC = () => {
         component={DriverSettingsScreen}
         options={{
           title: 'Ajustes',
-          tabBarIcon: ({color}) => <Text style={{color, fontSize: 20}}>⚙️</Text>,
+          tabBarIcon: renderSettingsIcon,
         }}
       />
     </Tab.Navigator>
