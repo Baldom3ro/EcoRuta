@@ -66,7 +66,16 @@ const DriverHomeScreen: React.FC<{navigation: any}> = ({navigation}) => {
         />
       </View>
 
-      {/* 2. ISLA FLOTANTE SUPERIOR: HEADER RUTA Y ESTADO DE TURNO */}
+      {/* 2. OVERLAY DESPUNTADOR AL TOCAR FUERA PARA COLAPSAR LA LISTA */}
+      {isExpanded && (
+        <TouchableOpacity
+          style={styles.backdropOverlay}
+          activeOpacity={1}
+          onPress={() => setIsExpanded(false)}
+        />
+      )}
+
+      {/* 3. ISLA FLOTANTE SUPERIOR: HEADER RUTA Y ESTADO DE TURNO */}
       <View style={[styles.floatingHeaderCard, {backgroundColor: colors.surface, borderColor: colors.border}]}>
         <View style={styles.headerTitleRow}>
           <View style={styles.btnRow}>
@@ -269,6 +278,15 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     position: 'relative',
+  },
+  backdropOverlay: {
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
+    backgroundColor: 'transparent',
+    zIndex: 5,
   },
   btnRow: {flexDirection: 'row', alignItems: 'center', gap: 6},
   floatingHeaderCard: {

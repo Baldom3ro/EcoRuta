@@ -389,3 +389,7 @@ EcoRuta/
 - Eliminado el Modal emergente; el desplegable ahora se extiende inline sobre la misma tarjeta flotante del mapa
 - Añadidos íconos SVG `chevron-down` y `chevron-up` a `src/components/Icon.tsx` para indicar la expansión y colapso de la lista de puntos
 - Validado paso limpio de `npx tsc --noEmit` y `npm run lint` (0 errores, 0 advertencias)
+
+### Commit 15 — Cierre Automático de Lista al Tocar Fuera del Desplegable
+- Añadida capa backdrop invisible `backdropOverlay` detrás del contenedor de puntos para colapsar la lista inline al presionar cualquier parte del mapa fuera de la tarjeta
+- Validado paso limpio de `npx tsc --noEmit` y `npm run lint` (0 errores, 0 advertencias)
