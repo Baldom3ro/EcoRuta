@@ -343,3 +343,8 @@ EcoRuta/
 - Corregida regla de componentes anidados en `CitizenTabs.tsx` y `DriverTabs.tsx` moviendo renderers de iconos fuera de las funciones de tab
 - Eliminados inline styles en `MapView.tsx`, `CreateReportScreen.tsx`, `SettingsScreen.tsx`, `AlertsScreen.tsx` y `ReportIncidentScreen.tsx`
 - Verificado `npm run lint` localmente con 0 errores y 0 advertencias para garantizar paso verde del workflow de GitHub Actions
+
+### Commit 7 — Alineación visual de vistas con `vistas generadas/ciudadano` y `wireframes.md`
+- Rediseñada la pantalla `CitizenHomeScreen` incorporando tarjeta ETA verde con distancia/tiempo restante, mapa OpenStreetMap interactivo, accesos rápidos de reporte, notificaciones y tips interactivos
+- Verificadas las pantallas de Reportar (`CreateReportScreen`), Mis Reportes (`MyReportsScreen`), Notificaciones (`NotificationsScreen`) y Configuración (`SettingsScreen`)
+- Validado paso limpio de `npx tsc --noEmit` y `npm run lint` (0 errores, 0 advertencias)

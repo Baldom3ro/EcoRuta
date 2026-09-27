@@ -1,4 +1,4 @@
-// Home Ciudadano - Mapa Interactivo OpenStreetMap + ETA + Consejos (HU-C01, HU-C05, views.md 3.3, design-system.md)
+// Home Ciudadano (Estructura fiel a wireframes.md 3.3, views.md y design-system.md)
 import React, {useEffect, useState} from 'react';
 import {
   View,
@@ -8,15 +8,18 @@ import {
   ScrollView,
 } from 'react-native';
 import {useTheme} from '../../context/ThemeContext';
+import {useAuth} from '../../context/AuthContext';
 import MapView from '../../components/MapView';
-import {TruckService} from '../../services';
-import {TruckLocation, Tip} from '../../services/types';
-import {Typography, Spacing} from '../../theme';
+import {TruckService, NotificationService} from '../../services';
+import {TruckLocation, Tip, Notification} from '../../services/types';
+import {Typography, Spacing, BorderRadius} from '../../theme';
 
 const CitizenHomeScreen: React.FC<{navigation: any}> = ({navigation}) => {
   const {colors} = useTheme();
+  const {user} = useAuth();
   const [truckLoc, setTruckLoc] = useState<TruckLocation | null>(null);
   const [tips, setTips] = useState<Tip[]>([]);
+  const [recentNotifs, setRecentNotifs] = useState<Notification[]>([]);
   const [currentTipIndex, setCurrentTipIndex] = useState(0);
 
   useEffect(() => {
@@ -24,26 +27,27 @@ const CitizenHomeScreen: React.FC<{navigation: any}> = ({navigation}) => {
       try {
         const loc = await TruckService.getTruckLocation();
         const tipsData = await TruckService.getTips();
+        const notifs = await NotificationService.getNotifications(user?.id || 'citizen-001');
         setTruckLoc(loc);
         setTips(tipsData);
+        setRecentNotifs(notifs.slice(0, 2));
       } catch {
         // Ignorar
       }
     };
     loadData();
 
-    // Actualiza ubicación del camión cada 5 segundos
     const interval = setInterval(async () => {
       const updatedLoc = await TruckService.getTruckLocation();
       setTruckLoc(updatedLoc);
     }, 5000);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [user]);
 
   const nextTip = () => {
     if (tips.length > 0) {
-      setCurrentTipIndex((prev) => (prev + 1) % tips.length);
+      setCurrentTipIndex(prev => (prev + 1) % tips.length);
     }
   };
 
@@ -51,22 +55,49 @@ const CitizenHomeScreen: React.FC<{navigation: any}> = ({navigation}) => {
     <ScrollView
       style={[styles.container, {backgroundColor: colors.background}]}
       contentContainerStyle={styles.content}>
-      {/* Estado del Servicio / ETA Banner */}
+      {/* Top Bar (wireframes.md 3.3) */}
+      <View style={[styles.topBar, {backgroundColor: colors.surface, borderColor: colors.border}]}>
+        <View style={styles.userInfo}>
+          <Text style={[styles.greeting, {color: colors.textSecondary}]}>
+            Hola, {user?.name || 'María García'}
+          </Text>
+          <View style={[styles.zoneBadge, {backgroundColor: colors.primaryLight + '40'}]}>
+            <Text style={[styles.zoneText, {color: colors.primaryDark}]}>
+              📍 {user?.zone || 'Zona Centro'}
+            </Text>
+          </View>
+        </View>
+        <TouchableOpacity
+          style={[styles.notifBtn, {backgroundColor: colors.background}]}
+          onPress={() => navigation.navigate('Notifications')}>
+          <Text style={styles.notifBtnText}>🔔</Text>
+        </TouchableOpacity>
+      </View>
+
+      {/* Tarjeta Estado del Servicio / ETA (wireframes.md 3.3) */}
       <View
         style={[
           styles.etaCard,
           {backgroundColor: colors.primary, shadowColor: colors.shadow},
         ]}>
         <View style={styles.etaHeader}>
-          <Text style={styles.etaBadgeText}>● SERVICIO ACTIVO</Text>
-          <Text style={styles.etaTime}>~15 MINUTOS</Text>
+          <Text style={styles.etaBadgeText}>● RUTA CENTRO - MAÑANA</Text>
+          <Text style={styles.etaStatusText}>EN CAMINO</Text>
         </View>
-        <Text style={styles.etaSubtext}>
-          Camión EcoRuta 001 a ~450m de tu domicilio
-        </Text>
+        <View style={styles.etaDetailsRow}>
+          <View>
+            <Text style={styles.etaLabel}>Tiempo Estimado (ETA)</Text>
+            <Text style={styles.etaValue}>~15 minutos</Text>
+          </View>
+          <View style={styles.etaDivider} />
+          <View>
+            <Text style={styles.etaLabel}>Distancia Faltante</Text>
+            <Text style={styles.etaValue}>450 metros</Text>
+          </View>
+        </View>
       </View>
 
-      {/* Mapa Interactivo con OpenStreetMap */}
+      {/* Mapa Interactivo OpenStreetMap (wireframes.md 3.3) */}
       <View style={[styles.mapCard, {borderColor: colors.border}]}>
         <MapView
           latitude={20.6625}
@@ -84,7 +115,7 @@ const CitizenHomeScreen: React.FC<{navigation: any}> = ({navigation}) => {
         />
       </View>
 
-      {/* Acciones Rápidas */}
+      {/* Botones de Acción (wireframes.md 3.3) */}
       <View style={styles.actionsRow}>
         <TouchableOpacity
           style={[styles.actionBtn, {backgroundColor: colors.secondary}]}
@@ -93,7 +124,32 @@ const CitizenHomeScreen: React.FC<{navigation: any}> = ({navigation}) => {
         </TouchableOpacity>
       </View>
 
-      {/* Consejos sobre Buenas Prácticas (HU-C05) */}
+      {/* Notificaciones Recientes (wireframes.md 3.3) */}
+      {recentNotifs.length > 0 && (
+        <View style={[styles.sectionCard, {backgroundColor: colors.surface, borderColor: colors.border}]}>
+          <View style={styles.sectionHeader}>
+            <Text style={[styles.sectionTitle, {color: colors.primaryDark}]}>
+              🔔 Notificaciones Recientes
+            </Text>
+            <TouchableOpacity onPress={() => navigation.navigate('Notifications')}>
+              <Text style={[styles.seeAllText, {color: colors.secondary}]}>Ver todas</Text>
+            </TouchableOpacity>
+          </View>
+          {recentNotifs.map(item => (
+            <View key={item.id} style={styles.notifItem}>
+              <Text style={styles.notifIcon}>
+                {item.type === 'proximity' ? '📍' : item.type === 'time_estimate' ? '⏰' : '💡'}
+              </Text>
+              <View style={styles.notifTextContainer}>
+                <Text style={[styles.notifTitle, {color: colors.text}]}>{item.title}</Text>
+                <Text style={[styles.notifMsg, {color: colors.textSecondary}]}>{item.message}</Text>
+              </View>
+            </View>
+          ))}
+        </View>
+      )}
+
+      {/* Consejos (HU-C05) */}
       {tips.length > 0 && (
         <TouchableOpacity
           style={[
@@ -104,7 +160,7 @@ const CitizenHomeScreen: React.FC<{navigation: any}> = ({navigation}) => {
           <Text style={styles.tipIcon}>{tips[currentTipIndex]?.icon || '💡'}</Text>
           <View style={styles.tipBody}>
             <Text style={[styles.tipTitle, {color: colors.primary}]}>
-              Consejo EcoRuta #{currentTipIndex + 1}
+              Consejo de Recolección #{currentTipIndex + 1}
             </Text>
             <Text style={[styles.tipText, {color: colors.text}]}>
               {tips[currentTipIndex]?.message}
@@ -120,9 +176,36 @@ const CitizenHomeScreen: React.FC<{navigation: any}> = ({navigation}) => {
 const styles = StyleSheet.create({
   container: {flex: 1},
   content: {padding: Spacing.md},
+  topBar: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: Spacing.md,
+    borderRadius: BorderRadius.md,
+    borderWidth: 1,
+    marginBottom: Spacing.md,
+  },
+  userInfo: {flex: 1},
+  greeting: {fontSize: Typography.sizes.md, fontWeight: 'bold'},
+  zoneBadge: {
+    alignSelf: 'flex-start',
+    paddingHorizontal: Spacing.xs,
+    paddingVertical: 2,
+    borderRadius: BorderRadius.sm,
+    marginTop: 4,
+  },
+  zoneText: {fontSize: Typography.sizes.xs, fontWeight: 'bold'},
+  notifBtn: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  notifBtnText: {fontSize: 20},
   etaCard: {
     padding: Spacing.md,
-    borderRadius: 16,
+    borderRadius: BorderRadius.lg,
     marginBottom: Spacing.md,
     elevation: 3,
   },
@@ -130,25 +213,30 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: Spacing.xs,
+    marginBottom: Spacing.sm,
   },
-  etaBadgeText: {
+  etaBadgeText: {color: '#FFFFFF', fontSize: Typography.sizes.xs, fontWeight: 'bold'},
+  etaStatusText: {
+    backgroundColor: 'rgba(255,255,255,0.2)',
     color: '#FFFFFF',
     fontSize: Typography.sizes.xs,
     fontWeight: 'bold',
+    paddingHorizontal: Spacing.xs,
+    paddingVertical: 2,
+    borderRadius: 4,
   },
-  etaTime: {
-    color: '#FFFFFF',
-    fontSize: Typography.sizes.lg,
-    fontWeight: 'bold',
+  etaDetailsRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    paddingTop: Spacing.xs,
   },
-  etaSubtext: {
-    color: 'rgba(255, 255, 255, 0.9)',
-    fontSize: Typography.sizes.sm,
-  },
+  etaLabel: {color: 'rgba(255,255,255,0.8)', fontSize: Typography.sizes.xs},
+  etaValue: {color: '#FFFFFF', fontSize: Typography.sizes.lg, fontWeight: 'bold', marginTop: 2},
+  etaDivider: {width: 1, height: 30, backgroundColor: 'rgba(255,255,255,0.3)'},
   mapCard: {
-    height: 300,
-    borderRadius: 16,
+    height: 280,
+    borderRadius: BorderRadius.lg,
     borderWidth: 1,
     marginBottom: Spacing.md,
     overflow: 'hidden',
@@ -160,40 +248,47 @@ const styles = StyleSheet.create({
   actionBtn: {
     flex: 1,
     padding: Spacing.md,
-    borderRadius: 12,
+    borderRadius: BorderRadius.md,
     alignItems: 'center',
   },
-  actionBtnText: {
-    color: '#FFFFFF',
-    fontSize: Typography.sizes.sm,
-    fontWeight: 'bold',
+  actionBtnText: {color: '#FFFFFF', fontSize: Typography.sizes.sm, fontWeight: 'bold'},
+  sectionCard: {
+    padding: Spacing.md,
+    borderRadius: BorderRadius.lg,
+    borderWidth: 1,
+    marginBottom: Spacing.md,
   },
+  sectionHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: Spacing.sm,
+  },
+  sectionTitle: {fontSize: Typography.sizes.sm, fontWeight: 'bold'},
+  seeAllText: {fontSize: Typography.sizes.xs, fontWeight: 'bold'},
+  notifItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: Spacing.xs,
+    borderTopWidth: StyleSheet.hairlineWidth,
+    borderTopColor: '#CCCCCC33',
+  },
+  notifIcon: {fontSize: 20, marginRight: Spacing.sm},
+  notifTextContainer: {flex: 1},
+  notifTitle: {fontSize: Typography.sizes.xs, fontWeight: 'bold'},
+  notifMsg: {fontSize: Typography.sizes.xs},
   tipCard: {
     flexDirection: 'row',
     alignItems: 'center',
     padding: Spacing.md,
-    borderRadius: 16,
+    borderRadius: BorderRadius.lg,
     borderWidth: 1,
   },
-  tipIcon: {
-    fontSize: 28,
-    marginRight: Spacing.sm,
-  },
-  tipBody: {
-    flex: 1,
-  },
-  tipTitle: {
-    fontSize: Typography.sizes.xs,
-    fontWeight: 'bold',
-    marginBottom: 2,
-  },
-  tipText: {
-    fontSize: Typography.sizes.sm,
-  },
-  tipNext: {
-    fontSize: Typography.sizes.xs,
-    marginLeft: Spacing.xs,
-  },
+  tipIcon: {fontSize: 28, marginRight: Spacing.sm},
+  tipBody: {flex: 1},
+  tipTitle: {fontSize: Typography.sizes.xs, fontWeight: 'bold', marginBottom: 2},
+  tipText: {fontSize: Typography.sizes.sm},
+  tipNext: {fontSize: Typography.sizes.xs, marginLeft: Spacing.xs},
 });
 
 export default CitizenHomeScreen;
